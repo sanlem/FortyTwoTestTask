@@ -1,9 +1,13 @@
 .container {
 	margin-left: 7%;
 	margin-right: 7%;
-	margin-top: 10%;
+	margin-top: 5%;
 }
 
 h1 {
 	text-align: center;
+}
+
+.contacts {
+	margin-bottom: 15px;
 }

@@ -1,31 +1,41 @@
-{% extends base.html %}
+{% extends "base.html" %}
 {% block content %}
-	<div class="row">
-		<div class="col-xs-6">Name: Vitaliy</div>
+<br>
+	{% for contact in contacts %}
+	<h2>{{ contact.name }} {{ contact.lastname }}</h2>
+	<div class="row contacts">
+		<div class="col-xs-6">Name: {{ contact.name }}</div>
 		<div class="col-xs-6">Contacts</div>
+		<hr>
 	</div>
 	
-	<div class="row">
-		<div class="col-xs-6">Lastname: Franchook</div>
-		<div class="col-xs-6">Email: email</div>
+	<div class="row contacts">
+		<div class="col-xs-6">Lastname: {{ contact.lastname }}</div>
+		<div class="col-xs-6">Email: {{ contact.email }}</div>
+		<hr>
 	</div>
 
-	<div class="row">
-		<div class="col-xs-6">Date of birth: 11-11-111</div>
-		<div class="col-xs-6">Jabber: JID</div>
+	<div class="row contacts">
+		<div class="col-xs-6">Date of birth: {{ contact.date_on_birth }}</div>
+		<div class="col-xs-6">Jabber: {{ contact.jabber_id }}</div>
+		<hr>
 	</div>
 
-	<div class="row">
-		<div class="col-xs-6 col-xs-offset-6">Skype: skype_login</div>
+	<div class="row contacts">
+		<div class="col-xs-6 col-xs-offset-6">Skype: {{ contact.skype_login }}</div>
+		<hr>
 	</div>	
 
-	<div class="row">
+	<div class="row contacts">
 		<div class="col-xs-6">Bio:</div>
 		<div class="col-xs-6">Other contacts:</div>
+		<hr>
 	</div>
 
-	<div class="row">
-		<div class="col-xs-6">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In ipsum atque et numquam, quasi officiis deleniti! Dolores illum dolorem quae asperiores accusantium consequuntur itaque tenetur assumenda, aspernatur a cumque excepturi nihil maxime consectetur, fugit vitae nam perferendis autem perspiciatis accusamus. Quidem perspiciatis, earum assumenda! Consectetur vitae harum minima earum fugiat.</div>
-		<div class="col-xs-6">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius, facilis laboriosam quis voluptate nisi eos. Necessitatibus non, magnam facere culpa delectus id! Autem in ducimus eveniet illum doloribus ea eos nulla, modi expedita saepe laboriosam tempore quia eligendi sunt beatae consectetur dolore odio similique adipisci. Veniam ab necessitatibus tempora delectus.</div>
+	<div class="row contacts">
+		<div class="col-xs-6">{{ contact.bio }}</div>
+		<div class="col-xs-6">{{ contact.other_contacts }}</div>
+		<hr>
 	</div>
+	{% endfor %}
 {% endblock %}
