@@ -1,14 +1,9 @@
 from django.shortcuts import render
-import datetime
+from django.core.management import call_command
+from apps.contacts.models import Contacts
 
 
 def contacts_list(request):
-    contacts = [{'name': "Myname",
-                 'lastname': "Mylastname",
-                 'email': "myemail",
-                 'date_of_birth': datetime.datetime.today(),
-                 'jabber_id': "myjabber",
-                 'skype_login': "myskype",
-                 'bio': "bio!",
-                 'other_contacts': "blabla"}]
+    call_command('loaddata', 'contacts.json', verbosity=0)
+    contacts = Contacts.objects.all()[:3]
     return render(request, 'contacts.html', {"contacts": contacts})
