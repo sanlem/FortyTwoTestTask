@@ -1,0 +1,20 @@
+[
+{
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+        "email": "admin@42cc.com",
+        "username": "admin",
+        "user_permissions": [],
+        "first_name": "",
+        "is_superuser": true,
+        "is_staff": true,
+        "last_login": null,
+        "is_active": true,
+        "last_name": "",
+        "password": "pbkdf2_sha256$20000$glangs4vhDqq$OI6xdR5x5VGVtq5E+8IVhB8+/2EBn6NNnxHqu56/1MM=",
+        "date_joined": "2016-01-29T14:26:55.640Z",
+        "groups": []
+    }
+}
+]
