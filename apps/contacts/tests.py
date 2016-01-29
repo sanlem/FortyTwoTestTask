@@ -32,10 +32,12 @@ class TestContactsView(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # check if we have 'Myname' in content
-        self.assertIn(bytes("Myname", 'utf-8'), response.content)
+        # self.assertIn(bytes("Myname", 'utf-8'), response.content)
+        self.assertIn("Myname", response.content)
 
         # check if we have "Bio:" label in content
-        self.assertIn(bytes("Bio:", 'utf-8'), response.content)
+        # self.assertIn(bytes("Bio:", 'utf-8'), response.content)
+        self.assertIn("Bio:", 'utf-8'), response.content)
 
         # ensure we have only one contacts object this time
         self.assertEqual(len(response.context['contacts']), 1)
