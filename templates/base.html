@@ -24,9 +24,8 @@
         <div class="container">
             <h1>42CoffeeCups test task</h1>
             <ul class="nav nav-tabs">
-                <li role="presentation" class="active"><a href="#">Contacts</a></li>
-                <li role="presentation"><a href="#">Profile</a></li>
-                <li role="presentation"><a href="#">Messages</a></li>
+                <li role="presentation" class="{% block contacts_tab_class %}{% endblock %}"><a href="/">Contacts</a></li>
+                <li role="presentation" class="{% block requests_tab_class %}{% endblock %}"><a href="/requests">Requests</a></li>
             </ul>
         {% block content %}{% endblock content %}
         </div>
