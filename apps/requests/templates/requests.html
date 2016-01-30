@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Requests - {% endblock %}
+{% block requests_tab_class %} active {% endblock %}
+{% block content %}
+<table class="table">
+	<tr class="row">
+		<td class="col-xs-9">
+			Path
+		</td>
+		<td class="col-xs-3">
+			Timestamp
+		</td>
+	</tr>
+	{% for obj in objects %}
+	<tr class="row">
+		<td class="col-xs-9">
+			{{ obj.url }}
+		</td>
+		<td class="col-xs-3">
+			{{ obj.timestamp }}
+		</td>
+	</tr>
+	{% endfor %}
+</table>
+{% endblock %}

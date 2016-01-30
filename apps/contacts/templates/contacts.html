@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Contacts - {% endblock %}
+{% block contacts_tab_class %} active {% endblock %}
 {% block content %}
 <br>
 	{% for contact in contacts %}
@@ -39,4 +40,7 @@
 		<hr>
 	</div>
 	{% endfor %}
+
+	<hr>
+	<p class="text"><a href="/requests">requests</a></p>
 {% endblock %}

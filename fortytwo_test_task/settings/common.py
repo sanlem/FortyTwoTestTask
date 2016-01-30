@@ -50,6 +50,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'requests.middleware.RequestMiddleware',
 )
 
 ROOT_URLCONF = 'fortytwo_test_task.urls'
@@ -122,6 +123,7 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(BASE_DIR, 'templates'),
     os.path.join(BASE_DIR, 'apps/contacts/templates'),
+    os.path.join(BASE_DIR, 'apps/requests/templates'),
 )
 
 # Turn off south during test
