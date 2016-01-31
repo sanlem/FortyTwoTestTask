@@ -45,3 +45,13 @@ class TestRequestsListEndpoint(TestCase):
             response = self.client.get(self.url)
         response_data = json.loads(response.content.decode())
         self.assertEqual(len(response_data), 10)
+
+    def test_filtering(self):
+        """ test filtering in custom get_queryset method """
+        for i in range(10):
+            self.client.get(self.url)
+        response = self.client.get(self.url + '?pk=7')
+        response_data = json.loads(response.content.decode())
+        self.assertEqual(len(response_data), 4)
+        self.assertEqual(response_data[0]["id"], 11)
+        self.assertEqual(response_data[-1]["id"], 8)
