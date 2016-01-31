@@ -1,5 +1,7 @@
 from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
+from rest_framework.test import APIClient
+import json
 
 
 class TestRequestsMiddlewareView(TestCase):
@@ -23,3 +25,23 @@ class TestRequestsMiddlewareView(TestCase):
         for i in range(11):
             response = self.client.get(self.url1)
         self.assertEqual(len(response.context["objects"]), 10)
+
+
+class TestRequestsListEndpoint(TestCase):
+
+    def setUp(self):
+        # remember client
+        self.client = APIClient()
+
+        self.url = reverse('requests_api')
+
+    def test_list(self):
+        """ test requests api endpoint.
+            should return no more than 10 objects. """
+        response = self.client.get(self.url)
+        response_data = json.loads(response.content.decode())
+        self.assertTrue(len(response_data), 1)
+        for i in range(10):
+            response = self.client.get(self.url)
+        response_data = json.loads(response.content.decode())
+        self.assertEqual(len(response_data), 10)
