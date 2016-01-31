@@ -128,5 +128,9 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'apps/requests/templates'),
 )
 
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
+}
+
 # Turn off south during test
 SOUTH_TESTS_MIGRATE = False

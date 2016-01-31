@@ -10,5 +10,12 @@ def requests_list(request):
 
 
 class RequestEntryListView(generics.ListAPIView):
-    queryset = RequestEntry.objects.all()[:10]
     serializer_class = RequestEntrySerializer
+
+    def get_queryset(self):
+        """ filter entries by id that is greater than passed """
+        queryset = RequestEntry.objects.all()
+        pk = self.request.query_params.get('pk', None)
+        if pk is not None:
+            queryset = queryset.filter(pk__gt=pk)
+        return queryset[:10]
