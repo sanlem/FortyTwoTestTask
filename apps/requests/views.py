@@ -1,7 +1,7 @@
 from django.shortcuts import render
+from .models import Request
 
 
 def requests_list(request):
-    objects = [{"url": "http://example.com", "timestamp": "16:00"},
-               {"url": "http://example.com/blabla", "timestamp": "16:05"}]
+    objects = Request.objects.all()[:10]
     return render(request, "requests.html", {"objects": objects})
