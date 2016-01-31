@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from .models import Request
+from apps.requests.models import RequestEntry
 
 
 def requests_list(request):
-    objects = Request.objects.all()[:10]
+    objects = RequestEntry.objects.all()[:10]
     return render(request, "requests.html", {"objects": objects})

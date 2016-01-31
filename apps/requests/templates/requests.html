@@ -4,8 +4,14 @@
 {% block content %}
 <table class="table">
 	<tr class="row">
-		<td class="col-xs-9">
+		<td class="col-xs-1">
+			Method
+		</td>
+		<td class="col-xs-7">
 			Path
+		</td>
+		<td class="col-xs-1">
+			AJAX
 		</td>
 		<td class="col-xs-3">
 			Timestamp
@@ -13,8 +19,14 @@
 	</tr>
 	{% for obj in objects %}
 	<tr class="row">
-		<td class="col-xs-9">
-			{{ obj.url }}
+		<td class="col-xs-1">
+			{{ obj.method }}
+		</td>
+		<td class="col-xs-7">
+			{{ obj.absolute_path }}
+		</td>
+		<td class="col-xs-1">
+			{{ obj.is_ajax }}
 		</td>
 		<td class="col-xs-3">
 			{{ obj.timestamp }}
