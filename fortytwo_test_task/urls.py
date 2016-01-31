@@ -10,6 +10,6 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'contacts.views.contacts_list', name="contacts_list"),
     url(r'^requests/', 'requests.views.requests_list', name="requests_list"),
-    url(r'^requests_api/', RequestEntryListView.as_view(), 
+    url(r'^requests_api/', RequestEntryListView.as_view(),
         name="requests_api"),
 ]
