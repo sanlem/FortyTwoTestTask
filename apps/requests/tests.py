@@ -1,5 +1,8 @@
 from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
+from rest_framework.test import APIClient
+from rest_framework.reverse import reverse as _reverse
+import json
 
 
 class TestRequestsMiddlewareView(TestCase):
@@ -23,3 +26,23 @@ class TestRequestsMiddlewareView(TestCase):
         for i in range(11):
             response = self.client.get(self.url1)
         self.assertEqual(len(response.context["objects"]), 10)
+
+
+class TestRequestsListEndpoint(TestCase):
+
+    def setUp(self):
+        # remember client
+        self.client = APIClient()
+
+        self.url = _reverse('requests-list')
+
+    def test_list(self):
+        response = Client.get(self.url)
+        response_data = json.loads(response.content.decode())
+        self.assertTrue(len(response_data), 1)
+        self.assertIn(self.url, response_data)
+        
+        for i in range(10):
+            response = Client.get(self.url)
+        response_data = json.loads(response.content.decode())
+        self.assertEqual(len(response_data), 10)
