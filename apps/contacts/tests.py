@@ -41,15 +41,16 @@ class TestContactsView(TestCase):
         self.assertTrue(isinstance(response.context['contacts'], Contacts))
 
         # if there are more than 1 contacts, should return the newest
-        contacts, created = \
-            Contacts.objects.get_or_create(name="Myname",
-                                           lastname="Mylastname",
-                                           email="myemail",
-                                           date_of_birth=datetime.today(),
-                                           jabber_id="myjabber",
-                                           skype_login="myskype",
-                                           bio="bio!",
-                                           other_contacts="blabla")
+        contacts = \
+            Contacts(name="Myname",
+                     lastname="Mylastname",
+                     email="myemail",
+                     date_of_birth=datetime.today(),
+                     jabber_id="myjabber",
+                     skype_login="myskype",
+                     bio="bio!",
+                     other_contacts="blabla")
+        contacts.save()
         response = self.client.get(self.url)
         self.assertEqual(response.context['contacts'].id, 2)
 
