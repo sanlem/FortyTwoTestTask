@@ -3,28 +3,28 @@
 {% block contacts_tab_class %} active {% endblock %}
 {% block content %}
 <br>
-	{% for contact in contacts %}
-	<h2>{{ contact.name }} {{ contact.lastname }}</h2>
+    {% if contacts %}
+	<h2>{{ contacts.name }} {{ contacts.lastname }}</h2>
 	<div class="row contacts">
-		<div class="col-xs-6">Name: {{ contact.name }}</div>
+		<div class="col-xs-6">Name: {{ contacts.name }}</div>
 		<div class="col-xs-6">Contacts</div>
 		<hr>
 	</div>
 	
 	<div class="row contacts">
-		<div class="col-xs-6">Lastname: {{ contact.lastname }}</div>
-		<div class="col-xs-6">Email: {{ contact.email }}</div>
+		<div class="col-xs-6">Lastname: {{ contacts.lastname }}</div>
+		<div class="col-xs-6">Email: {{ contacts.email }}</div>
 		<hr>
 	</div>
 
 	<div class="row contacts">
-		<div class="col-xs-6">Date of birth: {{ contact.date_of_birth }}</div>
-		<div class="col-xs-6">Jabber: {{ contact.jabber_id }}</div>
+		<div class="col-xs-6">Date of birth: {{ contacts.date_of_birth }}</div>
+		<div class="col-xs-6">Jabber: {{ contacts.jabber_id }}</div>
 		<hr>
 	</div>
 
 	<div class="row contacts">
-		<div class="col-xs-6 col-xs-offset-6">Skype: {{ contact.skype_login }}</div>
+		<div class="col-xs-6 col-xs-offset-6">Skype: {{ contacts.skype_login }}</div>
 		<hr>
 	</div>	
 
@@ -35,12 +35,14 @@
 	</div>
 
 	<div class="row contacts">
-		<div class="col-xs-6">{{ contact.bio }}</div>
-		<div class="col-xs-6">{{ contact.other_contacts }}</div>
+		<div class="col-xs-6">{{ contacts.bio }}</div>
+		<div class="col-xs-6">{{ contacts.other_contacts }}</div>
 		<hr>
 	</div>
-	{% endfor %}
+	{% else %}
+	<h2>No contacts.</h2>
+	{% endif %}
 
 	<hr>
-	<p class="text"><a href="/requests">requests</a></p>
+	<p class="text"><a href="{% url 'requests_list' %}">requests</a></p>
 {% endblock %}

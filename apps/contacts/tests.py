@@ -8,7 +8,7 @@ class TestContactsView(TestCase):
 
     def setUp(self):
         # create contacts object
-        contacts, created = \
+        self.contacts, created = \
             Contacts.objects.get_or_create(name="Myname",
                                            lastname="Mylastname",
                                            email="myemail",
@@ -31,16 +31,32 @@ class TestContactsView(TestCase):
         # checking response's status code
         self.assertEqual(response.status_code, 200)
 
-        # check if we have 'Myname' in content
-        # self.assertIn(bytes("Myname", 'utf-8'), response.content)
-        self.assertIn("Myname", response.content)
+        # check if we have correct name in content
+        self.assertIn(self.contacts.name, response.content)
 
         # check if we have "Bio:" label in content
-        # self.assertIn(bytes("Bio:", 'utf-8'), response.content)
         self.assertIn("Bio:", response.content)
 
-        # ensure we have only one contacts object this time
-        self.assertEqual(len(response.context['contacts']), 1)
+        # ensure view had only returned Contacts
+        self.assertTrue(isinstance(response.context['contacts'], Contacts))
+
+        # if there are more than 1 contacts, should return the newest
+        contacts, created = \
+            Contacts.objects.get_or_create(name="Myname",
+                                           lastname="Mylastname",
+                                           email="myemail",
+                                           date_of_birth=datetime.today(),
+                                           jabber_id="myjabber",
+                                           skype_login="myskype",
+                                           bio="bio!",
+                                           other_contacts="blabla")
+        response = self.client.get(self.url)
+        self.assertEqual(response.context['contacts'].id, 2)
+
+        # should render 'No contacts.' if aren't any
+        Contacts.objects.all().delete()
+        response = self.client.get(self.url)
+        self.assertIn('No contacts.', response.content)
 
 
 class TestContactsModel(TestCase):

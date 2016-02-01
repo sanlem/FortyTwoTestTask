@@ -3,6 +3,7 @@ from django.contrib import admin
 from apps.requests.views import RequestEntryListView
 
 
+admin.autodiscover()
 urlpatterns = [
     # Examples:
     # url(r'^$', 'fortytwo_test_task.views.home', name='home'),

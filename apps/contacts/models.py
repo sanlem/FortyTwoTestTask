@@ -2,8 +2,8 @@ from django.db import models
 
 
 class Contacts(models.Model):
-    name = models.CharField(max_length="25")
-    lastname = models.CharField(max_length="25")
+    name = models.CharField(max_length=25)
+    lastname = models.CharField(max_length=25)
     email = models.EmailField()
     date_of_birth = models.DateField()
     jabber_id = models.CharField(max_length=25, null=True, blank=True)
