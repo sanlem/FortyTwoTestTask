@@ -7,4 +7,5 @@ flake8==2.5.1
 mccabe==0.3.1
 pep8==1.7.0
 pyflakes==1.0.0
+whitenoise==2.0.6
 wsgiref==0.1.2
