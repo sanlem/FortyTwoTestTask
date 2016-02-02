@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-{% block title %}Requests - {% endblock %}
+{% block title %}Requests{% endblock %}
 {% block extra_head %}<script src="{% static 'js/requests.js' %}"></script>{% endblock %}
 {% block requests_tab_class %} active {% endblock %}
 {% block content %}
 <table class="table">
-	<tr class="row">
+	<tr class="row header">
 		<td class="col-xs-1">
 			Method
 		</td>
@@ -19,6 +19,7 @@
 			Timestamp
 		</td>
 	</tr>
+
 	{% for obj in objects %}
 	<tr class="row request"  id="{{ obj.id }}">
 		<td class="col-xs-1">
