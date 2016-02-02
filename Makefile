@@ -1,10 +1,6 @@
 MANAGE=django-admin.py
 SETTINGS=fortytwo_test_task.settings
 
-test:
-	PYTHONPATH=`pwd` DJANGO_SETTINGS_MODULE=$(SETTINGS) $(MANAGE) test
-	flake8 --exclude '*migrations*' --ignore=F403 apps fortytwo_test_task
-
 run:
 	PYTHONPATH=`pwd` DJANGO_SETTINGS_MODULE=$(SETTINGS) $(MANAGE) runserver
 
@@ -16,4 +12,10 @@ migrate:
 
 collectstatic:
 	PYTHONPATH=`pwd` DJANGO_SETTINGS_MODULE=$(SETTINGS) $(MANAGE) collectstatic --noinput
-.PHONY: collectstatic test syncdb migrate
+
+test:
+	PYTHONPATH=`pwd` DJANGO_SETTINGS_MODULE=$(SETTINGS) $(MANAGE) collectstatic --noinput 
+	PYTHONPATH=`pwd` DJANGO_SETTINGS_MODULE=$(SETTINGS) $(MANAGE) test
+	flake8 --exclude '*migrations*' --ignore=F403 apps fortytwo_test_task
+
+.PHONY: test syncdb migrate
