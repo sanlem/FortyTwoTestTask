@@ -5,7 +5,7 @@
 {% block requests_tab_class %} active {% endblock %}
 {% block content %}
 <table class="table">
-	<tr class="row">
+	<tr class="row header">
 		<td class="col-xs-1">
 			Method
 		</td>
@@ -19,8 +19,7 @@
 			Timestamp
 		</td>
 	</tr>
-</table>
-<table class="table requests">
+
 	{% for obj in objects %}
 	<tr class="row request"  id="{{ obj.id }}">
 		<td class="col-xs-1">

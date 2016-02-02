@@ -131,3 +131,6 @@ TEMPLATE_DIRS = (
 
 # Turn off south during test
 SOUTH_TESTS_MIGRATE = False
+
+# check if testing
+TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'

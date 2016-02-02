@@ -19,6 +19,7 @@ class TestRequestsMiddlewareView(TestCase):
 
         response = self.client.get(self.url1)
         self.assertIn(self.url1, response.content)
+        # 2 requests are already done
         self.assertEqual(len(response.context["objects"]), 2)
 
         # we only have to show last 10 requests
