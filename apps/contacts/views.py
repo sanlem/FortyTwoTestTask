@@ -3,5 +3,5 @@ from apps.contacts.models import Contacts
 
 
 def contacts_list(request):
-    contacts = Contacts.objects.all().last()
+    contacts = Contacts.objects.last()
     return render(request, 'contacts.html', {"contacts": contacts})

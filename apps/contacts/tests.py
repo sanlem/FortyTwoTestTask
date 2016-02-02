@@ -15,8 +15,8 @@ class TestContactsView(TestCase):
                                            date_of_birth=datetime.today(),
                                            jabber_id="myjabber",
                                            skype_login="myskype",
-                                           bio="bio!",
-                                           other_contacts="blabla")
+                                           bio="bio\r\n!",
+                                           other_contacts="bla\r\nbla")
 
         # remember client
         self.client = Client()
@@ -36,6 +36,9 @@ class TestContactsView(TestCase):
 
         # check if we have "Bio:" label in content
         self.assertIn("Bio:", response.content)
+
+        # check if we have br tag in conent
+        self.assertIn("br", response.content)
 
         # ensure view had only returned Contacts
         self.assertTrue(isinstance(response.context['contacts'], Contacts))
