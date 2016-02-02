@@ -35,8 +35,8 @@
 	</div>
 
 	<div class="row contacts">
-		<div class="col-xs-6">{{ contacts.bio }}</div>
-		<div class="col-xs-6">{{ contacts.other_contacts }}</div>
+		<div class="col-xs-6">{{ contacts.bio | linebreaks }}</div>
+		<div class="col-xs-6">{{ contacts.other_contacts | linebreaks }}</div>
 		<hr>
 	</div>
 	{% else %}

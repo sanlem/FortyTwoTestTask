@@ -1,17 +1,17 @@
 [
 {
+    "pk": 1, 
+    "model": "contacts.contacts", 
     "fields": {
-        "email": "myemail",
-        "other_contacts": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repudiandae neque corporis excepturi harum! Maxime iste, numquam voluptatum iure nobis molestiae similique magni hic voluptatibus quasi tempora vero ipsum porro quae laborum pariatur sed, illo aliquam unde optio, ad corporis labore libero quidem! Provident expedita nesciunt tenetur. Libero eligendi quisquam voluptate a aperiam aut temporibus dignissimos, dicta asperiores fugiat saepe, inventore et error amet necessitatibus magnam soluta natus architecto repellat adipisci veniam quod. Repudiandae hic voluptate accusamus, cum suscipit. Accusantium at, repudiandae! Dolores vero iure impedit minus cum quos eum voluptates vitae perferendis. Dolorum ab repudiandae temporibus dicta quam animi deleniti.",
-        "jabber_id": "myjabber",
-        "name": "Myname",
-        "bio": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repudiandae neque corporis excepturi harum! Maxime iste, numquam voluptatum iure nobis molestiae similique magni hic voluptatibus quasi tempora vero ipsum porro quae laborum pariatur sed, illo aliquam unde optio, ad corporis labore libero quidem! Provident expedita nesciunt tenetur. Libero eligendi quisquam voluptate a aperiam aut temporibus dignissimos, dicta asperiores fugiat saepe, inventore et error amet necessitatibus magnam soluta natus architecto repellat adipisci veniam quod. Repudiandae hic voluptate accusamus, cum suscipit. Accusantium at, repudiandae! Dolores vero iure impedit minus cum quos eum voluptates vitae perferendis. Dolorum ab repudiandae temporibus dicta quam animi deleniti.",
-        "date_of_birth": "2016-01-29",
-        "skype_login": "myskype",
-        "lastname": "Mylastname"
-    },
-    "model": "contacts.contacts",
-    "pk": 1
+        "jabber_id": "myjabber", 
+        "skype_login": "myskype", 
+        "name": "Myname", 
+        "bio": "I\r\nam\r\nmultiline", 
+        "lastname": "Mylastname", 
+        "date_of_birth": "2016-01-29", 
+        "other_contacts": "I\r\nam\r\nmultiline\r\ntoo!", 
+        "email": "myemail@example.com"
+    }
 },
 {
     "pk": 1, 
