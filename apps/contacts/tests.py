@@ -110,7 +110,7 @@ class TestContactsEditView(TestCase):
         # ensure there are control elements with Bootstrap classes
         self.assertIn('form-control', response.content)
         
-        response = self.client.post(self.url, { name: 'Pavlo'})
+        response = self.client.post(self.url, { 'name': 'Pavlo'})
         self.assertEqual(response.status_code, 200)
         # ensure the name is changed
         self.assertEqual(Contacts.objects.last().name, 'Pavlo')
@@ -125,7 +125,7 @@ class TestContactsEditView(TestCase):
                             other_contacts="blabla")
 
         # ensure view edits the newest object
-        response = self.client.post(self.url, { name: 'Vitaliy'})
+        response = self.client.post(self.url, { 'name': 'Vitaliy'})
         self.assertEqual(Contacts.objects.get(2).name, 'Vitaliy')
         self.assertEqual(Contacts.objects.get(1).name, 'Pavlo')
 
@@ -134,5 +134,5 @@ class TestContactsEditView(TestCase):
         response = self.client.get(self.url)
         self.assertIn("Can't edit. No contacts exist.", response.content)
         # should return 400 status code
-        response = self.client.post(self.url, { name: 'Vitaliy'})
+        response = self.client.post(self.url, { 'name': 'Vitaliy'})
         self.assertEqual(response.status_code, 400)
