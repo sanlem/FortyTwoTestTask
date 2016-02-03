@@ -134,8 +134,3 @@ SOUTH_TESTS_MIGRATE = False
 
 # check if testing
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
-
-# Simplified static file serving.
-# https://warehouse.python.org/project/whitenoise/
-
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'

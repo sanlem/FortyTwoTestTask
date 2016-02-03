@@ -9,9 +9,12 @@ $(document).ready(function() {
     var newestId = $('.request:first').attr('id');
     
     function updateRequests() {
-    	var url = "/requests_api/?pk=" + newestId.toString();
+    	var url = "{% url 'requests_api' %}" + '?pk=' + newestId.toString();
     	$.get(url, function(data, status){
-    	newestId = data[0]['id'];
+    	if(data[0]){
+            newestId = data[0]['id'];
+        };
+        dat
     	data.reverse().forEach(function(obj, i, data) {
     		if ($('tr.request').length == 10) {           
 					$('tr.request:last').remove();

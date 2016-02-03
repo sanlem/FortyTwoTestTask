@@ -46,6 +46,8 @@ class TestRequestsListEndpoint(TestCase):
             response = self.client.get(self.url)
         response_data = json.loads(response.content.decode())
         self.assertEqual(len(response_data), 10)
+        # last object should have id == 2
+        self.assertTrue(response_data[-1]["id"] == 2)
 
     def test_filtering(self):
         """ test filtering in custom get_queryset method """
@@ -56,3 +58,6 @@ class TestRequestsListEndpoint(TestCase):
         self.assertEqual(len(response_data), 4)
         self.assertEqual(response_data[0]["id"], 11)
         self.assertEqual(response_data[-1]["id"], 8)
+        # all ids should be greater than 7
+        for obj in response_data:
+            self.assertTrue(obj['id'] > 7)

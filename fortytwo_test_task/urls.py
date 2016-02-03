@@ -1,6 +1,7 @@
-from django.conf.urls import include, url
+from django.conf.urls import include, url, static
 from django.contrib import admin
 from apps.requests.views import RequestEntryListView
+from django.conf import settings
 
 
 admin.autodiscover()
@@ -13,4 +14,4 @@ urlpatterns = [
     url(r'^requests/', 'requests.views.requests_list', name="requests_list"),
     url(r'^requests_api/', RequestEntryListView.as_view(),
         name="requests_api"),
-]
+] + static.static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
