@@ -7,7 +7,6 @@ $(document).ready(function() {
     var newRequestsCounter = 0;
     // remember id of newest request
     var newestId = $('.request:first').attr('id');
-    var apiUrl = $('input#api').val();
     
     function updateRequests() {
         var url = apiUrl + '?pk=' + newestId.toString();
