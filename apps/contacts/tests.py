@@ -1,7 +1,8 @@
 from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
 from apps.contacts.models import Contacts
-from datetime import datetime
+from datetime import datetime, date
+from apps.contacts.forms import ContactsEditForm
 
 
 class TestContactsView(TestCase):
@@ -78,6 +79,13 @@ class TestContactsModel(TestCase):
 
         self.assertEqual(str(contacts), "Myname Mylastname's contacts")
 
+update_dict = {
+    'name': 'Pavlo',
+    'lastname': 'Samboruk',
+    'email': 'asd@ex.com',
+    'date_of_birth': date.today()
+} 
+
 
 class TestContactsEditView(TestCase):
     
@@ -86,7 +94,7 @@ class TestContactsEditView(TestCase):
         self.contacts, created = \
             Contacts.objects.get_or_create(name="Myname",
                                            lastname="Mylastname",
-                                           email="myemail",
+                                           email="myemail@email.com",
                                            date_of_birth=datetime.today(),
                                            jabber_id="myjabber",
                                            skype_login="myskype",
@@ -104,16 +112,24 @@ class TestContactsEditView(TestCase):
         response = self.client.get(self.url)
         # ensure we have form on the page
         self.assertIn('<form', response.content)
+        # ensure the form's media is loaded
+        self.assertIn(str(ContactsEditForm().media), response.content)
         # ensure form has right method and url
         self.assertIn("action='" + reverse('contacts_edit') + "'", response.content)
         self.assertIn("method='POST'", response.content)
         # ensure there are control elements with Bootstrap classes
         self.assertIn('form-control', response.content)
-        
-        response = self.client.post(self.url, { 'name': 'Pavlo'})
-        self.assertEqual(response.status_code, 200)
+        # ensure our contacts are loaded
+        self.assertEqual(response.context['object'], self.contacts)
+        # end fields are filled with proper data
+        self.assertIn('Myname', response.content)
+        self.assertIn('Mylastname', response.content)
+
+        response = self.client.post(self.url, update_dict)
+        self.assertEqual(response.status_code, 302)
         # ensure the name is changed
-        self.assertEqual(Contacts.objects.last().name, 'Pavlo')
+        self.assertEqual(Contacts.objects.get(pk=1).name, 'Pavlo')
+
 
         contacts = Contacts(name="Myname",
                             lastname="Mylastname",
@@ -123,16 +139,20 @@ class TestContactsEditView(TestCase):
                             skype_login="myskype",
                             bio="bio!",
                             other_contacts="blabla")
+        contacts.save()
 
+        params = update_dict.copy()
+        params['name'] = 'Vitaliy'
+        params['lastname'] = 'Franchook'
         # ensure view edits the newest object
-        response = self.client.post(self.url, { 'name': 'Vitaliy'})
-        self.assertEqual(Contacts.objects.get(2).name, 'Vitaliy')
-        self.assertEqual(Contacts.objects.get(1).name, 'Pavlo')
+        response = self.client.post(self.url, params)
+        self.assertEqual(Contacts.objects.get(pk=2).name, 'Vitaliy')
+        self.assertEqual(Contacts.objects.get(pk=1).name, 'Pavlo')
 
         Contacts.objects.all().delete()
         # should render 'Can't edit. No contacts exist.'
         response = self.client.get(self.url)
         self.assertIn("Can't edit. No contacts exist.", response.content)
-        # should return 400 status code
+        # should return 400 status code for post requests if no objects
         response = self.client.post(self.url, { 'name': 'Vitaliy'})
         self.assertEqual(response.status_code, 400)

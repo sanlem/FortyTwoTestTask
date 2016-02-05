@@ -1,6 +1,7 @@
 from django.conf.urls import include, url
 from django.contrib import admin
 from apps.requests.views import RequestEntryListView
+from apps.contacts.views import ContactsUpdateView
 from django.conf import settings
 from django.contrib.staticfiles import views
 
@@ -12,7 +13,7 @@ urlpatterns = [
     # url(r'^blog/', include('blog.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'contacts.views.contacts_list', name="contacts_list"),
-    url(r'^edit/', 'contacts.views.contacts_edit', name="contacts_edit"),
+    url(r'^edit/', ContactsUpdateView.as_view(), name="contacts_edit"),
     url(r'^requests/', 'requests.views.requests_list', name="requests_list"),
     url(r'^requests_api/', RequestEntryListView.as_view(),
         name="requests_api"),
