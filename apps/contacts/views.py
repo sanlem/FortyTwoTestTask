@@ -25,5 +25,4 @@ class ContactsUpdateView(UpdateView):
     def post(self, request, *args, **kwargs):
         if not self.get_object():
             return HttpResponse(status=400)
-        else:
-            return super(ContactsUpdateView, self).post(request, *args, **kwargs)
+        return super(ContactsUpdateView, self).post(request, *args, **kwargs)

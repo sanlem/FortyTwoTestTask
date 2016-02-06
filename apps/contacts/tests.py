@@ -4,6 +4,7 @@ from apps.contacts.models import Contacts
 from datetime import datetime, date
 from apps.contacts.forms import ContactsEditForm
 from django.contrib.auth.models import User
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 class TestContactsView(TestCase):
@@ -85,11 +86,11 @@ update_dict = {
     'lastname': 'Samboruk',
     'email': 'asd@ex.com',
     'date_of_birth': date.today()
-} 
+}
 
 
 class TestContactsEditView(TestCase):
-    
+
     def setUp(self):
         # create contacts object
         self.contacts, created = \
@@ -108,6 +109,10 @@ class TestContactsEditView(TestCase):
         # remember url
         self.url = reverse("contacts_edit")
 
+        # remember image
+        self.image = SimpleUploadedFile("image.jpg", "image",
+                                        content_type="image/jpeg")
+
     def test_contacts_edit_view(self):
         """ test contacts' edition """
         response = self.client.get(self.url)
@@ -116,10 +121,13 @@ class TestContactsEditView(TestCase):
         # ensure the form's media is loaded
         self.assertIn(str(ContactsEditForm().media), response.content)
         # ensure form has right method and url
-        self.assertIn("action='" + reverse('contacts_edit') + "'", response.content)
+        self.assertIn("action='" + reverse('contacts_edit') + "'",
+                      response.content)
         self.assertIn("method='POST'", response.content)
         # ensure there are control elements with Bootstrap classes
         self.assertIn('form-control', response.content)
+        # ensure enctype is correct
+        self.assertIn('enctype="multipart/form-data"', response.content)
         # ensure our contacts are loaded
         self.assertEqual(response.context['object'], self.contacts)
         # end fields are filled with proper data
@@ -130,7 +138,6 @@ class TestContactsEditView(TestCase):
         self.assertEqual(response.status_code, 302)
         # ensure the name is changed
         self.assertEqual(Contacts.objects.get(pk=1).name, 'Pavlo')
-
 
         contacts = Contacts(name="Myname",
                             lastname="Mylastname",
@@ -155,8 +162,19 @@ class TestContactsEditView(TestCase):
         response = self.client.get(self.url)
         self.assertIn("Can't edit. No contacts exist.", response.content)
         # should return 400 status code for post requests if no objects
-        response = self.client.post(self.url, { 'name': 'Vitaliy'})
+        response = self.client.post(self.url, {'name': 'Vitaliy'})
         self.assertEqual(response.status_code, 400)
+
+    def test_image_upload(self):
+        """ some tests for image uploading """
+        params = update_dict.copy()
+        params.update({'image': self.image})
+        response = self.client.post(reverse('contacts_edit'), params)
+        # redirect if success
+        self.assertEqual(response.status_code, 302)
+        # check if image was scaled
+        self.assertEqual(self.contacts.image.width, 200)
+        self.assertEqual(self.contacts.image.height, 200)
 
 
 class TestAuth(TestCase):
@@ -174,14 +192,18 @@ class TestAuth(TestCase):
         self.client = Client()
 
     def test_login_and_logout(self):
+        """ test auth """
         response = self.client.post(self.login_url,
-            { 'username': self.user.username, 'password': 'wrong_password'})
+                                    {'username': self.user.username,
+                                     'password': 'wrong_password'})
         # credentials are wrong
-        self.assertTrue(response.context['user'].is_anonymous() == True)
-        self.assertIn('Please enter a correct username and password', response.content)
+        self.assertTrue(response.context['user'].is_anonymous())
+        self.assertIn('Please enter a correct username and password',
+                      response.content)
 
         response = self.client.post(self.login_url,
-            { 'username': self.user.username, 'password': self.password})
+                                    {'username': self.user.username,
+                                     'password': self.password})
         # correct credentials. redirecting
         self.assertEqual(response.status_code, 302)
         response = self.client.get(reverse('contacts_list'))
@@ -190,5 +212,4 @@ class TestAuth(TestCase):
         response = self.client.post(self.logout_url)
         self.assertEqual(response.status_code, 302)
         response = self.client.get(reverse('contacts_list'))
-        self.assertTrue(response.context['user'].is_anonymous() == True)
-        
+        self.assertTrue(response.context['user'].is_anonymous())

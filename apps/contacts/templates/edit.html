@@ -16,7 +16,7 @@
 <p class="text-danger">{{ form.non_field_errors }}</p>
 
 <div class="form-container">
-<form class="form-horizontal" action='{% url "contacts_edit" %}' method='POST' id="editForm">
+<form class="form-horizontal" action='{% url "contacts_edit" %}' method='POST' id="editForm" enctype="multipart/form-data">
 	{% csrf_token %}
 
 	<div class="row">
