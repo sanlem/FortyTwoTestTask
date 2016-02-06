@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from apps.contacts.models import Contacts
 from datetime import datetime, date
 from apps.contacts.forms import ContactsEditForm
+from django.contrib.auth.models import User
 
 
 class TestContactsView(TestCase):
@@ -156,3 +157,38 @@ class TestContactsEditView(TestCase):
         # should return 400 status code for post requests if no objects
         response = self.client.post(self.url, { 'name': 'Vitaliy'})
         self.assertEqual(response.status_code, 400)
+
+
+class TestAuth(TestCase):
+
+    def setUp(self):
+        # remember User
+        self.user = User(username='sanlem')
+        self.password = '11111'
+        self.user.set_password(self.password)
+        self.user.save()
+
+        self.login_url = reverse('login')
+        self.logout_url = reverse('logout')
+
+        self.client = Client()
+
+    def test_login_and_logout(self):
+        response = self.client.post(self.login_url,
+            { 'username': self.user.username, 'password': 'wrong_password'})
+        # credentials are wrong
+        self.assertTrue(response.context['user'].is_anonymous() == True)
+        self.assertIn('Please enter a correct username and password', response.content)
+
+        response = self.client.post(self.login_url,
+            { 'username': self.user.username, 'password': self.password})
+        # correct credentials. redirecting
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get(reverse('contacts_list'))
+        self.assertEqual(response.context['user'], self.user)
+        # logout
+        response = self.client.post(self.logout_url)
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get(reverse('contacts_list'))
+        self.assertTrue(response.context['user'].is_anonymous() == True)
+        

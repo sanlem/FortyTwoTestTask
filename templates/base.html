@@ -26,12 +26,18 @@
                     <p class="text">42 Coffee Cups Test Assignment</p>
                 </div>
                 <div class="col-xs-3 col-xs-offset-3">
-                    <p class="text"><a href="#">Login</a></p>
+                    {% if user.is_anonymous %}
+                        <p class="text"><a href="{% url 'login' %}">Login</a></p>
+                    {% else %}
+                        <p class="text">Hello, {{ user.username }}. <a href="{% url 'logout' %}">logout</a></p>
+                    {% endif %}
                 </div>
             </div>
             <ul class="nav nav-tabs">
                 <li role="presentation" class="{% block contacts_tab_class %}{% endblock %}"><a href="{% url 'contacts_list' %}">Contacts</a></li>
                 <li role="presentation" class="{% block requests_tab_class %}{% endblock %}"><a href="{% url 'requests_list' %}">Requests</a></li>
+                <li role="presentation" class="{% block edit_tab_class %}{% endblock %}"><a href="{% url 'contacts_edit' %}">Edit</a></li>
+                <li role="presentation" class="{% block login_tab_class %}{% endblock %}"><a href="{% url 'login' %}">Login</a></li>
             </ul>
         {% block content %}{% endblock content %}
         </div>

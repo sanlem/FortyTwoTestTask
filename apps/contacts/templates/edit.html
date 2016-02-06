@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 {% block title %}Edit{% endblock %}
-{% block contacts_tab_class %} active {% endblock %}
 {% block extra_head %} {{ form.media | safe }} 
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
 <script src="{% static 'js/initForm.js' %}"></script>
 {% endblock %}
+
+{% block edit_tab_class %} active {% endblock %}
+
 {% block content %}
 <br>
 {% if object %}

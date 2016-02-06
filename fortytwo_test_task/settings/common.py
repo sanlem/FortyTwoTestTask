@@ -136,3 +136,6 @@ SOUTH_TESTS_MIGRATE = False
 # check if testing
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+# can't use reverse here. raises ImproperlyConfigured
+LOGIN_REDIRECT_URL = '/'

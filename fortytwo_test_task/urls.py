@@ -4,6 +4,7 @@ from apps.requests.views import RequestEntryListView
 from apps.contacts.views import ContactsUpdateView
 from django.conf import settings
 from django.contrib.staticfiles import views
+from django.contrib.auth import views as auth_views
 
 
 admin.autodiscover()
@@ -17,6 +18,8 @@ urlpatterns = [
     url(r'^requests/', 'requests.views.requests_list', name="requests_list"),
     url(r'^requests_api/', RequestEntryListView.as_view(),
         name="requests_api"),
+    url(r'^login/', auth_views.login, { 'template_name': 'login.html' }, name="login"),
+    url(r'^logout/', auth_views.logout, {'next_page': '/' }, name="logout"),
 ]
 
 if settings.DEBUG:
