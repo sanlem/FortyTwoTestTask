@@ -101,6 +101,10 @@ class TestContactsEditView(TestCase):
                                            skype_login="myskype",
                                            bio="bio\r\n!",
                                            other_contacts="bla\r\nbla")
+        # creating user to log it in
+        u = User(username='admin')
+        u.set_password('admin')
+        u.save()
 
         # remember client
         self.client = Client()
@@ -113,6 +117,12 @@ class TestContactsEditView(TestCase):
 
     def test_contacts_edit_view(self):
         """ test contacts' edition """
+        response = self.client.get(self.url)
+        # not authenticated
+        url = reverse('login') + '?next=/edit/'
+        self.assertRedirects(response, url, status_code=302)
+        self.client.login(username='admin', password='admin')
+        # authenticated now
         response = self.client.get(self.url)
         # ensure we have form on the page
         self.assertIn('<form', response.content)
@@ -165,6 +175,7 @@ class TestContactsEditView(TestCase):
 
     def test_image_upload(self):
         """ some tests for image uploading """
+        self.client.login(username='admin', password='admin')
         params = update_dict.copy()
         params.update({'image': self.image})
         response = self.client.post(reverse('contacts_edit'), params)
