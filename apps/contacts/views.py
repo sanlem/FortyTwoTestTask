@@ -4,6 +4,8 @@ from apps.contacts.forms import ContactsEditForm
 from django.views.generic import UpdateView
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 
 def contacts_list(request):
@@ -15,6 +17,10 @@ class ContactsUpdateView(UpdateView):
     form_class = ContactsEditForm
     model = Contacts
     template_name = 'edit.html'
+
+    @method_decorator(login_required(login_url='/login/'))
+    def dispatch(self, *args, **kwargs):
+        return super(ContactsUpdateView, self).dispatch(*args, **kwargs)
 
     def get_success_url(self):
         return reverse('contacts_list')
