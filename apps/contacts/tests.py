@@ -31,21 +31,21 @@ class TestContactsView(TestCase):
     def test_contacts_list(self):
         """ testing contacts list view """
         response = self.client.get(self.url)
-
         # checking response's status code
         self.assertEqual(response.status_code, 200)
-
         # check if we have correct name in content
         self.assertIn(self.contacts.name, response.content)
-
         # check if we have "Bio:" label in content
         self.assertIn("Bio:", response.content)
-
         # check if we have br tag in conent
         self.assertIn("br", response.content)
-
         # ensure view had only returned Contacts
         self.assertTrue(isinstance(response.context['contacts'], Contacts))
+
+        # check if we have admin edit link
+        edit_url = reverse('admin:contacts_contacts_change',
+                           args=[self.contacts.id])
+        self.assertIn(edit_url, response.content)
 
         # if there are more than 1 contacts, should return the newest
         contacts = \
