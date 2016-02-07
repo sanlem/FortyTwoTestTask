@@ -230,7 +230,7 @@ class TestAuth(TestCase):
 
 
 class TestCommand(TestCase):
-    
+
     def setUp(self):
         for i in range(4):
             u = User(username='usr' + str(i))
@@ -251,9 +251,9 @@ class TestCommand(TestCase):
 
         result_out = out.getvalue()
         result_err = err.getvalue()
-        self.assertIn('User in database: 4', result_out)
-        self.assertIn('error: User in database: 4', result_err)
-        self.assertIn('Contacts in database: 1', result_out)
-        self.assertIn('error: Contacts in database: 1', result_err)
-        self.assertIn('RequestEntry in database: 3', result_out)
-        self.assertIn('error: RequestEntry in database: 3', result_err)
+        self.assertIn('user in database: 4', result_out)
+        self.assertIn('error: user in database: 4', result_err)
+        self.assertIn('contacts in database: 1', result_out)
+        self.assertIn('error: contacts in database: 1', result_err)
+        self.assertIn('requestentry in database: 3', result_out)
+        self.assertIn('error: requestentry in database: 3', result_err)
