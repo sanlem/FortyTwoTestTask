@@ -6,7 +6,7 @@ class BootstrapDateInput(forms.DateInput):
     class Media:
         css = {
             all: ('http://cdnjs.cloudflare.com/ajax/libs/bootstrap-' +
-                  'datetimepicker/4.0.0/css/bootstrap-datetimepicker.min.css')
+                  'datetimepicker/4.0.0/css/bootstrap-datetimepicker.min.css',)
         }
         js = ('https://cdn.jsdelivr.net/bootstrap/3.3.6/js/bootstrap.min.js',
               'http://cdnjs.cloudflare.com/ajax/libs/bootstrap-' +
@@ -33,5 +33,9 @@ class ContactsEditForm(forms.ModelForm):
                     'class': 'form-control'
                 })
 
+        # we will init as datepicker field found by this class
         field = self.fields.get('date_of_birth')
         field.widget.attrs['class'] += ' datepicker'
+        # delete form-control class from ImageField widget
+        field = self.fields.get('image')
+        field.widget.attrs.pop('class')

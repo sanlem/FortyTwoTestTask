@@ -4,7 +4,6 @@ from apps.contacts.models import Contacts
 from datetime import datetime, date
 from apps.contacts.forms import ContactsEditForm
 from django.contrib.auth.models import User
-from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 class TestContactsView(TestCase):
@@ -110,8 +109,7 @@ class TestContactsEditView(TestCase):
         self.url = reverse("contacts_edit")
 
         # remember image
-        self.image = SimpleUploadedFile("image.jpg", "image",
-                                        content_type="image/jpeg")
+        self.image = open('./assets/test_image.png')
 
     def test_contacts_edit_view(self):
         """ test contacts' edition """
@@ -171,10 +169,13 @@ class TestContactsEditView(TestCase):
         params.update({'image': self.image})
         response = self.client.post(reverse('contacts_edit'), params)
         # redirect if success
+        contacts = Contacts.objects.last()
         self.assertEqual(response.status_code, 302)
         # check if image was scaled
-        self.assertEqual(self.contacts.image.width, 200)
-        self.assertEqual(self.contacts.image.height, 200)
+        self.assertTrue(contacts.image.width <= 200)
+        self.assertTrue(contacts.image.height <= 200)
+        # check if it is jpeg now
+        self.assertIn('jpeg', contacts.image.name)
 
 
 class TestAuth(TestCase):

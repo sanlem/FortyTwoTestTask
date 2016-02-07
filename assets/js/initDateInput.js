@@ -3,6 +3,7 @@ function initDatepicker(){
 		'format': 'YYYY-MM-DD'
 	});
 };
+
 $(document).ready(function() {
 	initDatepicker();
 });
