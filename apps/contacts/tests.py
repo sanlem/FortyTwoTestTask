@@ -4,6 +4,8 @@ from apps.contacts.models import Contacts
 from datetime import datetime, date
 from apps.contacts.forms import ContactsEditForm
 from django.contrib.auth.models import User
+from django.utils.six import StringIO
+from django.core.management import call_command
 
 
 class TestContactsView(TestCase):
@@ -225,3 +227,33 @@ class TestAuth(TestCase):
         self.assertEqual(response.status_code, 302)
         response = self.client.get(reverse('contacts_list'))
         self.assertTrue(response.context['user'].is_anonymous())
+
+
+class TestCommand(TestCase):
+    
+    def setUp(self):
+        for i in range(4):
+            u = User(username='usr' + str(i))
+            u.save()
+
+        c = Contacts(**update_dict)
+        c.save()
+
+        client = Client()
+        for i in range(3):
+            client.get(reverse('login'))
+
+    def test_command(self):
+        """ test of command's output """
+        out = StringIO()
+        err = StringIO()
+        call_command('models_info', stdout=out, stderr=err)
+
+        result_out = out.getvalue()
+        result_err = err.getvalue()
+        self.assertIn('User in database: 4', result_out)
+        self.assertIn('error: User in database: 4', result_err)
+        self.assertIn('Contacts in database: 1', result_out)
+        self.assertIn('error: Contacts in database: 1', result_err)
+        self.assertIn('RequestEntry in database: 3', result_out)
+        self.assertIn('error: RequestEntry in database: 3', result_err)
