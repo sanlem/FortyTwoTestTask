@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %}Edit{% endblock %}
+{% block extra_head %} {{ form.media | safe }} 
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+<script src="{% static 'js/initForm.js' %}"></script>
+{% endblock %}
+
+{% block edit_tab_class %} active {% endblock %}
+
+{% block content %}
+<br>
+{% if object %}
+<h2>{{ object.name }} {{ object.lastname }} - Edit</h2>
+
+<p class="text-danger">{{ form.non_field_errors }}</p>
+
+<div class="form-container">
+<form class="form-horizontal" action='{% url "contacts_edit" %}' method='POST' id="editForm" enctype="multipart/form-data">
+	{% csrf_token %}
+
+	<div class="row">
+    	
+    	<label for="name" class="col-xs-1 control-label">{{ form.name.label }}</label>
+    	<div class="col-xs-5">
+      		{{ form.name }}
+    	</div>
+		
+    	<label for="email" class="col-xs-1 control-label">{{ form.email.label }}</label>
+    	<div class="col-xs-5">
+      		{{ form.email }}
+    	</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-xs-5 col-xs-offset-1">
+			<p class="text-danger">{{ form.name.errors.as_text }}</p>
+		</div>
+		<div class="col-xs-5 col-xs-offset-1">
+			<p class="text-danger">{{ form.email.errors.as_text }}</p>
+		</div>
+	</div>
+
+	<br>
+
+	<div class="row">
+    	
+    	<label for="{{ form.lastname.id_for_label }}" class="col-xs-1 control-label">{{ form.lastname.label }}</label>
+    	<div class="col-xs-5">
+      		{{ form.lastname }}	
+		</div>
+    		
+    	<label for="{{ form.jabber_id.id_for_label }}" class="col-xs-1 control-label">{{ form.jabber_id.label }}</label>
+    	<div class="col-xs-5">
+      		{{ form.jabber_id }}	
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-5 col-xs-offset-1">
+			<p class="text-danger">{{ form.lastname.errors.as_text }}</p>
+		</div>
+		<div class="col-xs-5 col-xs-offset-1">
+			<p class="text-danger">{{ form.jabber_id.errors.as_text }}</p>
+		</div>
+	</div>
+
+	<br>
+
+	<div class="row">
+		<label for="{{ form.date_of_birth.id_for_label }}" class="col-xs-1 control-label">{{ form.date_of_birth.label }}</label>
+    	<div class="col-xs-5">
+      		{{ form.date_of_birth }}
+		</div>
+
+		<label for="{{ form.skype.label_for_id }}" class="col-xs-1 control-label">{{ form.skype.label }}</label>
+    	<div class="col-xs-5">
+      		{{ form.skype }}
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-5 col-xs-offset-1">
+			<p class="text-danger">{{ form.date_of_bitrh.errors.as_text }}</p>
+		</div>
+		<div class="col-xs-5 col-xs-offset-1">
+			<p class="text-danger">{{ form.skype.errors.as_text }}</p>
+		</div>
+	</div>
+
+	<br>
+
+	<div class="row">	
+    	<label for="photo" class="col-xs-1 control-label">Photo</label>
+    	<div class="col-xs-5">
+      		{{ form.image }}
+    	</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-6">
+			<p class="text-danger">{{ form.image.errors.as_text }}</p>
+		</div>
+	</div>
+
+	<br>
+
+	<div class="row">
+		<div class="col-xs-6">
+		{% if object.image %}
+		<img src="{{ object.image.url }}">
+		{% else %}
+		<img src="http://ww1.prweb.com/prfiles/2014/04/10/11752526/gI_134971_best-image-web-hosting.png">
+		{% endif %}
+		</div>
+		<div class="col-xs-6">
+			<label for="{{ form.bio.label_for_id }}" class="control-label">{{ form.bio.label }}</label>
+			{{ form.bio }}
+			<p class="text-danger">{{ form.bio.errors.as_text }}</p>
+
+			<label for="{{ form.other_contacts.label_for_id }}" class="control-label">{{ form.other_contacts.label }}</label>
+			{{ form.other_contacts }}
+			<p class="text-danger">{{ form.other_contacts.errors.as_text }}</p>
+		</div>
+	</div>
+
+	<br>
+
+	<div class="row">
+		<div class="col-xs-1">
+			<button type="submit" class="btn btn-default">Submit</button>
+		</div>
+		<div class="col-xs-1">
+			<a href="{% url 'contacts_list' %}">Cancel</a>
+		</div>
+	</div>
+</form>
+</div>
+{% else %}
+<h2>Can't edit. No contacts exist.</h2>
+{% endif %}
+<hr>
+<a href="{% url 'requests_list' %}">requests</a>
+{% endblock %}

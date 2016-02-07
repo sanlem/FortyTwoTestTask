@@ -14,16 +14,32 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
         <link rel="stylesheet" href="{% static 'css/screen.css' %}" media="screen, projection"/>
         <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
 
         {% block extra_head %}{% endblock extra_head %}
 
     </head>
     <body id="{% block body_id %}{% endblock %}" class="{% block body_class %}{% endblock %}">
         <div class="container">
-            <h1>42 Coffee Cups Test Assignment</h1>
+            <div class="row">
+                <div class="col-xs-6">
+                    <p class="text">42 Coffee Cups Test Assignment</p>
+                </div>
+                <div class="col-xs-3 col-xs-offset-3">
+                    {% if user.is_anonymous %}
+                        <p class="text"><a href="{% url 'login' %}">Login</a></p>
+                    {% else %}
+                        <p class="text">Hello, {{ user.username }}. <a href="{% url 'logout' %}">logout</a></p>
+                    {% endif %}
+                </div>
+            </div>
             <ul class="nav nav-tabs">
                 <li role="presentation" class="{% block contacts_tab_class %}{% endblock %}"><a href="{% url 'contacts_list' %}">Contacts</a></li>
                 <li role="presentation" class="{% block requests_tab_class %}{% endblock %}"><a href="{% url 'requests_list' %}">Requests</a></li>
+                <li role="presentation" class="{% block edit_tab_class %}{% endblock %}"><a href="{% url 'contacts_edit' %}">Edit</a></li>
+                {% if user.is_anonymous %}
+                <li role="presentation" class="{% block login_tab_class %}{% endblock %}"><a href="{% url 'login' %}">Login</a></li>
+                {% endif %}
             </ul>
         {% block content %}{% endblock content %}
         </div>

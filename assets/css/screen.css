@@ -4,14 +4,14 @@
 	margin-top: 5%;
 }
 
-h1 {
-	text-align: center;
-}
-
 .contacts {
 	margin-bottom: 15px;
 }
 
 .new {
 	background-color: #F7F7F9;
+}
+
+.text {
+	font-size: 26px;
 }

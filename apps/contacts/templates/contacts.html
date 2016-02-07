@@ -8,35 +8,38 @@
 	<div class="row contacts">
 		<div class="col-xs-6">Name: {{ contacts.name }}</div>
 		<div class="col-xs-6">Contacts</div>
-		<hr>
 	</div>
 	
 	<div class="row contacts">
 		<div class="col-xs-6">Lastname: {{ contacts.lastname }}</div>
 		<div class="col-xs-6">Email: {{ contacts.email }}</div>
-		<hr>
 	</div>
 
 	<div class="row contacts">
 		<div class="col-xs-6">Date of birth: {{ contacts.date_of_birth }}</div>
 		<div class="col-xs-6">Jabber: {{ contacts.jabber_id }}</div>
-		<hr>
 	</div>
 
 	<div class="row contacts">
-		<div class="col-xs-6 col-xs-offset-6">Skype: {{ contacts.skype_login }}</div>
-		<hr>
+		<div class="col-xs-6">Photo:</div>
+		<div class="col-xs-6">Skype: {{ contacts.skype_login }}</div>
 	</div>	
 
 	<div class="row contacts">
-		<div class="col-xs-6">Bio:</div>
-		<div class="col-xs-6">Other contacts:</div>
-		<hr>
-	</div>
-
-	<div class="row contacts">
-		<div class="col-xs-6">{{ contacts.bio | linebreaks }}</div>
-		<div class="col-xs-6">{{ contacts.other_contacts | linebreaks }}</div>
+		<div class="col-xs-6">
+		{% if contacts.image %}
+		<img src="{{ MEDIA_URL }}{{ contacts.image }}">
+		{% else %}
+		<img src="http://ww1.prweb.com/prfiles/2014/04/10/11752526/gI_134971_best-image-web-hosting.png"></div>
+		{% endif %}
+		</div>
+		<div class="col-xs-6">
+			Bio:
+			{{ contacts.other_contacts | linebreaks }}
+			<br>
+			Other contacts:
+			{{ contacts.bio | linebreaks }}
+		</div>
 		<hr>
 	</div>
 	{% else %}
@@ -44,5 +47,5 @@
 	{% endif %}
 
 	<hr>
-	<p class="text"><a href="{% url 'requests_list' %}">requests</a></p>
+	<a href="{% url 'requests_list' %}">requests</a>
 {% endblock %}
