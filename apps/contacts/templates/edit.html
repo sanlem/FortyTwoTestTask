@@ -34,10 +34,10 @@
 	
 	<div class="row">
 		<div class="col-xs-5 col-xs-offset-1">
-			<p class="text-danger">{{ form.name.errors.as_text }}</p>
+			<p class="errors text-danger">{{ form.name.errors.as_text }}</p>
 		</div>
 		<div class="col-xs-5 col-xs-offset-1">
-			<p class="text-danger">{{ form.email.errors.as_text }}</p>
+			<p class="errors text-danger">{{ form.email.errors.as_text }}</p>
 		</div>
 	</div>
 
@@ -58,10 +58,10 @@
 
 	<div class="row">
 		<div class="col-xs-5 col-xs-offset-1">
-			<p class="text-danger">{{ form.lastname.errors.as_text }}</p>
+			<p class="errors text-danger">{{ form.lastname.errors.as_text }}</p>
 		</div>
 		<div class="col-xs-5 col-xs-offset-1">
-			<p class="text-danger">{{ form.jabber_id.errors.as_text }}</p>
+			<p class="errors text-danger">{{ form.jabber_id.errors.as_text }}</p>
 		</div>
 	</div>
 
@@ -73,18 +73,18 @@
       		{{ form.date_of_birth }}
 		</div>
 
-		<label for="{{ form.skype.label_for_id }}" class="col-xs-1 control-label">{{ form.skype.label }}</label>
+		<label for="{{ form.skype.label_for_id }}" class="col-xs-1 control-label">{{ form.skype_login.label }}</label>
     	<div class="col-xs-5">
-      		{{ form.skype }}
+      		{{ form.skype_login }}
 		</div>
 	</div>
 
 	<div class="row">
 		<div class="col-xs-5 col-xs-offset-1">
-			<p class="text-danger">{{ form.date_of_bitrh.errors.as_text }}</p>
+			<p class="errors text-danger">{{ form.date_of_bitrh.errors.as_text }}</p>
 		</div>
 		<div class="col-xs-5 col-xs-offset-1">
-			<p class="text-danger">{{ form.skype.errors.as_text }}</p>
+			<p class="errors text-danger">{{ form.skype_login.errors.as_text }}</p>
 		</div>
 	</div>
 
@@ -99,7 +99,7 @@
 
 	<div class="row">
 		<div class="col-xs-6">
-			<p class="text-danger">{{ form.image.errors.as_text }}</p>
+			<p class="errors text-danger">{{ form.image.errors.as_text }}</p>
 		</div>
 	</div>
 
@@ -116,11 +116,11 @@
 		<div class="col-xs-6">
 			<label for="{{ form.bio.label_for_id }}" class="control-label">{{ form.bio.label }}</label>
 			{{ form.bio }}
-			<p class="text-danger">{{ form.bio.errors.as_text }}</p>
+			<p class="errors text-danger">{{ form.bio.errors.as_text }}</p>
 
 			<label for="{{ form.other_contacts.label_for_id }}" class="control-label">{{ form.other_contacts.label }}</label>
 			{{ form.other_contacts }}
-			<p class="text-danger">{{ form.other_contacts.errors.as_text }}</p>
+			<p class="errors text-danger">{{ form.other_contacts.errors.as_text }}</p>
 		</div>
 	</div>
 
