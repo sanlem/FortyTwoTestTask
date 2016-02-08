@@ -182,9 +182,8 @@ class TestContactsEditView(TestCase):
         params = update_dict.copy()
         params.update({'image': self.image})
         response = self.client.post(reverse('contacts_edit'), params)
-        # redirect if success
         contacts = Contacts.objects.last()
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
         # check if image was scaled
         self.assertTrue(contacts.image.width <= 200)
         self.assertTrue(contacts.image.height <= 200)
