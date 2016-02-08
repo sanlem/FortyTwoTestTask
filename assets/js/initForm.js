@@ -38,22 +38,20 @@ function initForm(){
 		
 		'success': function(data, status, xhr) {
 			var html = $(data), successMessage = html.find('p.message');
-			enableControl();
-			loading.remove();
-			if (successMessage.length > 0) {
-				setTimeout(function() {
+			setTimeout(function (){
+				loading.remove();
+				enableControl();
+				if (successMessage.length > 0) {
 					formContainer.before(successMessage);
-					// initForm(newForm);
-				}, 500);
-			} else {
-				var newErrors = html.find('p.errors');
-				var oldErrors = $('p.errors');
-				removeSuccessMessage();
-				// $('p.errors:first').text('hello');
-				oldErrors.each(function(i){
-					$(this).text($(newErrors.get(i)).text());
-				});
-			}
+				} else {
+					var newErrors = html.find('p.errors');
+					var oldErrors = $('p.errors');
+					removeSuccessMessage();
+					oldErrors.each(function(i){
+						$(this).text($(newErrors.get(i)).text());
+					});
+				}
+			}, 500);
 		},
 
 		'beforeSend': function() {
