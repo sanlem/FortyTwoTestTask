@@ -1,4 +1,4 @@
-function enableControl(form) {
+function enableControl(form) { 
 	var controlElements = form.find('input, textarea, button');
 	controlElements.prop('disabled', false);
 };
