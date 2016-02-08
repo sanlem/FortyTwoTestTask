@@ -61,6 +61,7 @@ function initForm(){
 		},
 	});
 };
+
 $(document).ready(function() {
 	initForm();
 });
