@@ -145,7 +145,8 @@ class TestContactsEditView(TestCase):
         self.assertIn('Mylastname', response.content)
 
         response = self.client.post(self.url, update_dict)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Saved successfully', response.content)
         # ensure the name is changed
         self.assertEqual(Contacts.objects.get(pk=1).name, 'Pavlo')
 
