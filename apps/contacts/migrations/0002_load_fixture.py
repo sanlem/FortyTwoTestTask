@@ -15,12 +15,21 @@ class Migration(DataMigration):
         "Write your backwards methods here."
 
     models = {
+        u'contacts.changeentry': {
+            'Meta': {'object_name': 'ChangeEntry'},
+            'action': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'instance_id': ('django.db.models.fields.IntegerField', [], {}),
+            'model_name': ('django.db.models.fields.CharField', [], {'max_length': '25'}),
+            'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
+        },
         u'contacts.contacts': {
             'Meta': {'object_name': 'Contacts'},
             'bio': ('django.db.models.fields.TextField', [], {'max_length': '300', 'null': 'True', 'blank': 'True'}),
             'date_of_birth': ('django.db.models.fields.DateField', [], {}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'jabber_id': ('django.db.models.fields.CharField', [], {'max_length': '25', 'null': 'True', 'blank': 'True'}),
             'lastname': ('django.db.models.fields.CharField', [], {'max_length': '25'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '25'}),
