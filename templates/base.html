@@ -41,6 +41,11 @@
                 <li role="presentation" class="{% block login_tab_class %}{% endblock %}"><a href="{% url 'login' %}">Login</a></li>
                 {% endif %}
             </ul>
+        {% if messages %}
+            {% for message in messages %}
+                <p class="text-{{ message.tag }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
         {% block content %}{% endblock content %}
         </div>
     </body>

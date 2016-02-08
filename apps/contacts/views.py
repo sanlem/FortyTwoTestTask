@@ -3,9 +3,9 @@ from apps.contacts.models import Contacts
 from apps.contacts.forms import ContactsEditForm
 from django.views.generic import UpdateView
 from django.http import HttpResponse
-from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.contrib import messages
 
 
 def contacts_list(request):
@@ -22,9 +22,6 @@ class ContactsUpdateView(UpdateView):
     def dispatch(self, *args, **kwargs):
         return super(ContactsUpdateView, self).dispatch(*args, **kwargs)
 
-    def get_success_url(self):
-        return reverse('contacts_list')
-
     def get_object(self):
         return Contacts.objects.last()
 
@@ -32,3 +29,8 @@ class ContactsUpdateView(UpdateView):
         if not self.get_object():
             return HttpResponse(status=400)
         return super(ContactsUpdateView, self).post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        self.object = form.save()
+        messages.success(self.request, 'Saved successfully.')
+        return self.render_to_response(self.get_context_data(form=form))
