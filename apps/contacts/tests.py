@@ -1,6 +1,6 @@
 from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
-from apps.contacts.models import Contacts
+from apps.contacts.models import Contacts, ChangeEntry
 from datetime import datetime, date
 from apps.contacts.forms import ContactsEditForm
 from django.contrib.auth.models import User
@@ -257,3 +257,30 @@ class TestCommand(TestCase):
         self.assertIn('error: contacts in database: 1', result_err)
         self.assertIn('requestentry in database: 3', result_out)
         self.assertIn('error: requestentry in database: 3', result_err)
+
+
+class TestSignalProcessor(TestCase):
+    
+    def test_processor(self):
+        """ creating some objects and checking theirs ChangeEntries. """
+        
+        u = User(username='usr' + str(i))
+        u.save()
+        # test creation
+        change = ChangeEntry.objects.last()
+        self.assertEqual(change.model_name, 'User')
+        self.assertEqual(change.action, 'created')
+        self.assertEqual(change.instance_id, u.id)
+        u.set_password('bla')
+        u.save()
+        # test update
+        change = ChangeEntry.objects.last()
+        self.assertEqual(change.action, 'updated')
+        self.assertEqual(change.instance_id, u.id)
+        self.assertEqual(ChangeEntry.objects.all().count(), 2)
+        # test deletion
+        u.delete()
+        change = ChangeEntry.objects.last()
+        self.assertEqual(change.action, 'deleted')
+        self.assertEqual(change.instance_id, u.id)
+        self.assertEqual(ChangeEntry.objects.all().count(), 3)
