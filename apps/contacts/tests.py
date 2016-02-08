@@ -260,11 +260,11 @@ class TestCommand(TestCase):
 
 
 class TestSignalProcessor(TestCase):
-    
+
     def test_processor(self):
         """ creating some objects and checking theirs ChangeEntries. """
-        
-        u = User(username='usr' + str(i))
+
+        u = User(username='usr')
         u.save()
         # test creation
         change = ChangeEntry.objects.last()
@@ -279,8 +279,10 @@ class TestSignalProcessor(TestCase):
         self.assertEqual(change.instance_id, u.id)
         self.assertEqual(ChangeEntry.objects.all().count(), 2)
         # test deletion
+        # remember user's id before deletion
+        deleted_id = u.id
         u.delete()
         change = ChangeEntry.objects.last()
         self.assertEqual(change.action, 'deleted')
-        self.assertEqual(change.instance_id, u.id)
+        self.assertEqual(change.instance_id, deleted_id)
         self.assertEqual(ChangeEntry.objects.all().count(), 3)
