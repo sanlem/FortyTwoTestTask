@@ -1,9 +1,11 @@
 from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
-from apps.contacts.models import Contacts
+from apps.contacts.models import Contacts, ChangeEntry
 from datetime import datetime, date
 from apps.contacts.forms import ContactsEditForm
 from django.contrib.auth.models import User
+from django.utils.six import StringIO
+from django.core.management import call_command
 
 
 class TestContactsView(TestCase):
@@ -29,21 +31,21 @@ class TestContactsView(TestCase):
     def test_contacts_list(self):
         """ testing contacts list view """
         response = self.client.get(self.url)
-
         # checking response's status code
         self.assertEqual(response.status_code, 200)
-
         # check if we have correct name in content
         self.assertIn(self.contacts.name, response.content)
-
         # check if we have "Bio:" label in content
         self.assertIn("Bio:", response.content)
-
         # check if we have br tag in conent
         self.assertIn("br", response.content)
-
         # ensure view had only returned Contacts
         self.assertTrue(isinstance(response.context['contacts'], Contacts))
+
+        # check if we have admin edit link
+        edit_url = reverse('admin:contacts_contacts_change',
+                           args=[self.contacts.id])
+        self.assertIn(edit_url, response.content)
 
         # if there are more than 1 contacts, should return the newest
         contacts = \
@@ -225,3 +227,62 @@ class TestAuth(TestCase):
         self.assertEqual(response.status_code, 302)
         response = self.client.get(reverse('contacts_list'))
         self.assertTrue(response.context['user'].is_anonymous())
+
+
+class TestCommand(TestCase):
+
+    def setUp(self):
+        for i in range(4):
+            u = User(username='usr' + str(i))
+            u.save()
+
+        c = Contacts(**update_dict)
+        c.save()
+
+        client = Client()
+        for i in range(3):
+            client.get(reverse('login'))
+
+    def test_command(self):
+        """ test of command's output """
+        out = StringIO()
+        err = StringIO()
+        call_command('models_info', stdout=out, stderr=err)
+
+        result_out = out.getvalue()
+        result_err = err.getvalue()
+        self.assertIn('user in database: 4', result_out)
+        self.assertIn('error: user in database: 4', result_err)
+        self.assertIn('contacts in database: 1', result_out)
+        self.assertIn('error: contacts in database: 1', result_err)
+        self.assertIn('requestentry in database: 3', result_out)
+        self.assertIn('error: requestentry in database: 3', result_err)
+
+
+class TestSignalProcessor(TestCase):
+
+    def test_processor(self):
+        """ creating some objects and checking theirs ChangeEntries. """
+
+        u = User(username='usr')
+        u.save()
+        # test creation
+        change = ChangeEntry.objects.last()
+        self.assertEqual(change.model_name, 'User')
+        self.assertEqual(change.action, 'created')
+        self.assertEqual(change.instance_id, u.id)
+        u.set_password('bla')
+        u.save()
+        # test update
+        change = ChangeEntry.objects.last()
+        self.assertEqual(change.action, 'updated')
+        self.assertEqual(change.instance_id, u.id)
+        self.assertEqual(ChangeEntry.objects.all().count(), 2)
+        # test deletion
+        # remember user's id before deletion
+        deleted_id = u.id
+        u.delete()
+        change = ChangeEntry.objects.last()
+        self.assertEqual(change.action, 'deleted')
+        self.assertEqual(change.instance_id, deleted_id)
+        self.assertEqual(ChangeEntry.objects.all().count(), 3)

@@ -43,3 +43,10 @@ class Contacts(models.Model):
                 pass
 
         super(Contacts, self).save(*args, **kwargs)
+
+
+class ChangeEntry(models.Model):
+    model_name = models.CharField(max_length=25)
+    action = models.CharField(max_length=10)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    instance_id = models.IntegerField()
