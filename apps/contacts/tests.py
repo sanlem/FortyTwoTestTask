@@ -6,6 +6,7 @@ from apps.contacts.forms import ContactsEditForm
 from django.contrib.auth.models import User
 from django.utils.six import StringIO
 from django.core.management import call_command
+from django.template import Template, Context
 
 
 class TestContactsView(TestCase):
@@ -277,7 +278,8 @@ class TestSignalProcessor(TestCase):
         change = ChangeEntry.objects.last()
         self.assertEqual(change.action, 'updated')
         self.assertEqual(change.instance_id, u.id)
-        self.assertEqual(ChangeEntry.objects.all().count(), 2)
+        counter = ChangeEntry.objects.filter(model_name='User').count()
+        self.assertEqual(counter, 2)
         # test deletion
         # remember user's id before deletion
         deleted_id = u.id
@@ -285,4 +287,23 @@ class TestSignalProcessor(TestCase):
         change = ChangeEntry.objects.last()
         self.assertEqual(change.action, 'deleted')
         self.assertEqual(change.instance_id, deleted_id)
-        self.assertEqual(ChangeEntry.objects.all().count(), 3)
+        counter += 1
+        self.assertEqual(counter, 3)
+
+
+class TestTemplateTags(TestCase):
+
+    def test_edit_link(self):
+        """ test edit_link tag. """
+        c = Contacts(**update_dict)
+        template = Template(
+            "{% load link %}"
+            "{% edit_link obj %}"
+        )
+        out = template.render(Context({'obj': c}))
+        edit_url = reverse('admin:contacts_contacts_change',
+                           args=[c.id])
+        self.assertIn(edit_url, out)
+        # nothing should be rendered if no object passed
+        out = template.render(Context({}))
+        self.assertEqual(out, '')
