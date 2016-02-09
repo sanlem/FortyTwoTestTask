@@ -16,7 +16,7 @@ def post_save_processor(sender, **kwargs):
     if sender.__name__ == 'Session':
         ce.instance_id = kwargs['instance'].session_key
     else:
-        ce.instance_id = kwargs['instance'].id
+        ce.instance_id = unicode(kwargs['instance'].id)
     if kwargs['created']:
         ce.action = 'created'
     else:
@@ -34,6 +34,6 @@ def post_delete_processor(sender, **kwargs):
     if sender.__name__ == 'Session':
         ce.instance_id = kwargs['instance'].session_key
     else:
-        ce.instance_id = kwargs['instance'].id
+        ce.instance_id = unicode(kwargs['instance'].id)
     ce.action = 'deleted'
     ce.save()
