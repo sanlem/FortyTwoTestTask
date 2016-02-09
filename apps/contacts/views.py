@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib import messages
-from apps.contacts import signals
+from apps.contacts import signals # flake8: noqa
 
 
 def contacts_list(request):
