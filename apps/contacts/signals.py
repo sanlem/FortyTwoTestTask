@@ -12,11 +12,14 @@ def post_save_processor(sender, **kwargs):
         return
     ce = ChangeEntry()
     ce.model_name = sender.__name__
-    # session objects have no id
+    # session objects have no id. Saving user's id.
     if sender.__name__ == 'Session':
-        ce.instance_id = kwargs['instance'].session_key
+        uid = kwargs['instance'].get_decoded().get('_auth_user_id')
+        if not uid:
+            uid = 0
+        ce.instance_id = uid
     else:
-        ce.instance_id = unicode(kwargs['instance'].id)
+        ce.instance_id = kwargs['instance'].id
     if kwargs['created']:
         ce.action = 'created'
     else:
@@ -30,10 +33,13 @@ def post_delete_processor(sender, **kwargs):
         return
     ce = ChangeEntry()
     ce.model_name = sender.__name__
-    # session objects have no id
+    # session objects have no id. Saving user's id.
     if sender.__name__ == 'Session':
-        ce.instance_id = kwargs['instance'].session_key
+        uid = kwargs['instance'].get_decoded().get('_auth_user_id')
+        if not uid:
+            uid = 0
+        ce.instance_id = uid
     else:
-        ce.instance_id = unicode(kwargs['instance'].id)
+        ce.instance_id = kwargs['instance'].id
     ce.action = 'deleted'
     ce.save()

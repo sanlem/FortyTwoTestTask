@@ -281,18 +281,18 @@ class TestSignalProcessor(TestCase):
         change = ChangeEntry.objects.last()
         self.assertEqual(change.model_name, 'User')
         self.assertEqual(change.action, 'created')
-        self.assertEqual(change.instance_id, unicode(u.id))
+        self.assertEqual(change.instance_id, u.id)
         u.set_password('bla')
         u.save()
         # test update
         change = ChangeEntry.objects.last()
         self.assertEqual(change.action, 'updated')
-        self.assertEqual(change.instance_id, unicode(u.id))
+        self.assertEqual(change.instance_id, u.id)
         counter = ChangeEntry.objects.filter(model_name='User').count()
         self.assertEqual(counter, 2)
         # test deletion
         # remember user's id before deletion
-        deleted_id = unicode(u.id)
+        deleted_id = u.id
         u.delete()
         change = ChangeEntry.objects.last()
         self.assertEqual(change.action, 'deleted')
