@@ -10,12 +10,11 @@ IGNORED_MODELS = ['ChangeEntry']
 def post_save_processor(sender, **kwargs):
     if sender.__name__ in IGNORED_MODELS:
         return
-
     ce = ChangeEntry()
     ce.model_name = sender.__name__
     # session objects have no id
     if sender.__name__ == 'Session':
-        ce.instance_id = 0
+        ce.instance_id = kwargs['instance'].session_key
     else:
         ce.instance_id = kwargs['instance'].id
     if kwargs['created']:
@@ -29,12 +28,11 @@ def post_save_processor(sender, **kwargs):
 def post_delete_processor(sender, **kwargs):
     if sender.__name__ in IGNORED_MODELS:
         return
-
     ce = ChangeEntry()
     ce.model_name = sender.__name__
     # session objects have no id
     if sender.__name__ == 'Session':
-        ce.instance_id = 0
+        ce.instance_id = kwargs['instance'].session_key
     else:
         ce.instance_id = kwargs['instance'].id
     ce.action = 'deleted'
