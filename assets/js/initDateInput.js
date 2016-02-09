@@ -1,6 +1,7 @@
 function initDatepicker(){
 	$('.datepicker').datetimepicker({
-		'format': 'YYYY-MM-DD'
+		'format': 'YYYY-MM-DD',
+		'keepOpen': true,
 	});
 };
 
