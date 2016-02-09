@@ -167,6 +167,16 @@ class TestContactsEditView(TestCase):
         response = self.client.post(self.url, params)
         self.assertEqual(Contacts.objects.get(pk=2).name, 'Vitaliy')
         self.assertEqual(Contacts.objects.get(pk=1).name, 'Pavlo')
+        # invalid data
+        params['name'] = ''
+        params['date_of_birth'] = 'azaza'
+        params['email'] = 'azaza'
+        response = self.client.post(self.url, params)
+        self.assertIn('This field is required.', response.content)
+        self.assertIn('Enter a valid date.', response.content)
+        self.assertIn('Enter a valid email address.', response.content)
+        # ensure object didn't changed
+        self.assertEqual(Contacts.objects.get(pk=2).name, 'Vitaliy')
 
         Contacts.objects.all().delete()
         # should render 'Can't edit. No contacts exist.'
