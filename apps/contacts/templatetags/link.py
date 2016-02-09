@@ -6,6 +6,8 @@ register = template.Library()
 
 @register.simple_tag
 def edit_link(obj):
+    if not obj:
+        return ''
 
     content_types = ContentType.objects.get_for_model(obj.__class__)
     return reverse('admin:%s_%s_change' % (content_types.app_label,
