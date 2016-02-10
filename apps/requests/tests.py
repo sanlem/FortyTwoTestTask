@@ -21,11 +21,14 @@ class TestRequestsMiddlewareView(TestCase):
         self.assertIn(self.url1, response.content)
         # 2 requests are already done
         self.assertEqual(len(response.context["objects"]), 2)
-
+        # default priority should be equal 0
+        self.assertIn('Priority', response.content)
+        self.assertEqual(response.context['objects'][0].priority, 0)
         # we only have to show last 10 requests
         for i in range(11):
             response = self.client.get(self.url1)
         self.assertEqual(len(response.context["objects"]), 10)
+
 
 
 class TestRequestsListEndpoint(TestCase):
