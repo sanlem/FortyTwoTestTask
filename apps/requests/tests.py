@@ -30,7 +30,6 @@ class TestRequestsMiddlewareView(TestCase):
         self.assertEqual(len(response.context["objects"]), 10)
 
 
-
 class TestRequestsListEndpoint(TestCase):
 
     def setUp(self):
