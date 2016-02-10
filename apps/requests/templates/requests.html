@@ -16,7 +16,7 @@
 		<td class="col-xs-1">
 			Method
 		</td>
-		<td class="col-xs-7">
+		<td class="col-xs-6">
 			Path
 		</td>
 		<td class="col-xs-1">
@@ -25,6 +25,9 @@
 		<td class="col-xs-3">
 			Timestamp
 		</td>
+		<td class="col-xs-1">
+			Priority
+		</td>
 	</tr>
 
 	{% for obj in objects %}
@@ -32,7 +35,7 @@
 		<td class="col-xs-1">
 			{{ obj.method }}
 		</td>
-		<td class="col-xs-7">
+		<td class="col-xs-6">
 			{{ obj.absolute_path }}
 		</td>
 		<td class="col-xs-1">
@@ -40,6 +43,9 @@
 		</td>
 		<td class="col-xs-3">
 			{{ obj.timestamp }}
+		</td>
+		<td class="col-xs-1">
+			{{ obj.priority }}
 		</td>
 	</tr>
 	{% endfor %}

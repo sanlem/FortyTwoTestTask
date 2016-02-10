@@ -30,7 +30,7 @@ $(document).ready(function() {
             }).appendTo(row);
             // add path col
             $('<td/>', {
-                'class': 'col-xs-7',
+                'class': 'col-xs-6',
                 text: obj.absolute_path     
             }).appendTo(row);
             // add is_ajax col
@@ -42,6 +42,11 @@ $(document).ready(function() {
             $('<td/>', {
                 'class': 'col-xs-3',
                 text: Date(obj.timestamp).toString()
+            }).appendTo(row);
+            // add priority
+            $('<td/>', {
+                'class': 'col-xs-1',
+                text: obj.priority.toString()
             }).appendTo(row);
             // increment counter
             newRequestsCounter ++;
