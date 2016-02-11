@@ -1,6 +1,7 @@
 from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
 from rest_framework.test import APIClient
+from apps.requests.models import RequestEntry
 import json
 
 
@@ -63,3 +64,18 @@ class TestRequestsListEndpoint(TestCase):
         # all ids should be greater than 7
         for obj in response_data:
             self.assertTrue(obj['id'] > 7)
+
+    def test_ordering(self):
+        """ test ordering: should have 2 modes. """
+        RequestEntry.objects.create(method='GET',
+                                    absolute_path=reverse('login'),
+                                    is_ajax=False, priority=1)
+        response = self.client.get(self.url)
+        response_data = json.loads(response.content.decode())
+        # should be ordered descending by priority if no params passed
+        self.assertEqual(response_data[0]["priority"], 1)
+        response = self.client.get(self.url + '?ordering=0')
+        response_data = json.loads(response.content.decode())
+        # should be ordered ascending now
+        self.assertEqual(response_data[0]["priority"], 0)
+        self.assertEqual(response_data[2]["priority"], 1)
