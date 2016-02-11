@@ -5,8 +5,13 @@ from rest_framework import generics
 
 
 def requests_list(request):
-    objects = RequestEntry.objects.all()[:10]
+    objects = list(RequestEntry.objects.order_by('-timestamp')[:10])
+    objects.sort(key=sort_by_priority, reverse=True)
     return render(request, "requests.html", {"objects": objects})
+
+
+def sort_by_priority(obj):
+    return obj.priority
 
 
 class RequestEntryListView(generics.ListAPIView):
@@ -14,12 +19,16 @@ class RequestEntryListView(generics.ListAPIView):
 
     def get_queryset(self):
         """ filter entries by id that is greater than passed """
-        queryset = RequestEntry.objects.all().order_by('-priority',
-                                                       '-timestamp')
+        queryset = RequestEntry.objects.order_by('-timestamp')
         pk = self.request.query_params.get('pk', None)
         ordr = self.request.query_params.get('order', None)
+        qs = list(queryset[:10])
+        qs.sort(key=sort_by_priority)
         if pk is not None:
             queryset = queryset.filter(pk__gt=pk)
         if ordr is not None:
-            queryset = queryset.order_by('priority')
-        return queryset[:10]
+            qs.sort(key=sort_by_priority)
+            return qs
+        else:
+            qs.sort(key=sort_by_priority, reverse=True)
+            return qs
