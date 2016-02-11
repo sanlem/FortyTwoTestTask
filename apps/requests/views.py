@@ -14,8 +14,12 @@ class RequestEntryListView(generics.ListAPIView):
 
     def get_queryset(self):
         """ filter entries by id that is greater than passed """
-        queryset = RequestEntry.objects.all()
+        queryset = RequestEntry.objects.all().order_by('-priority',
+                                                       '-timestamp')
         pk = self.request.query_params.get('pk', None)
+        ordr = self.request.query_params.get('order', None)
         if pk is not None:
             queryset = queryset.filter(pk__gt=pk)
+        if ordr is not None:
+            queryset = queryset.order_by('priority')
         return queryset[:10]

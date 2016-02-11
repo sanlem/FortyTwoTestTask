@@ -74,8 +74,9 @@ class TestRequestsListEndpoint(TestCase):
         response_data = json.loads(response.content.decode())
         # should be ordered descending by priority if no params passed
         self.assertEqual(response_data[0]["priority"], 1)
-        response = self.client.get(self.url + '?ordering=0')
+        response = self.client.get(self.url, {'order': 0})
         response_data = json.loads(response.content.decode())
         # should be ordered ascending now
         self.assertEqual(response_data[0]["priority"], 0)
+        self.assertEqual(response_data[1]["priority"], 0)
         self.assertEqual(response_data[2]["priority"], 1)
