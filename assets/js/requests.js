@@ -55,7 +55,7 @@ $(document).ready(function() {
                 // add timestamp
                 $('<td/>', {
                     'class': 'col-xs-3',
-                    text: Date(obj.timestamp).toString()
+                    text: obj.timestamp
                 }).appendTo(row);
                 // add priority
                 $('<td/>', {
