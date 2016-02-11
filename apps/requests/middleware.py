@@ -7,7 +7,7 @@ class RequestMiddleware(object):
 
     def process_request(self, request):
         # we shouldn't save request if it is that fetches new requests
-        if (request.path == reverse('requests_api') and request.is_ajax()):
+        if (reverse('requests_api') in request.path and request.is_ajax()):
             return
 
         r = RequestEntry()

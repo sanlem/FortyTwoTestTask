@@ -11,6 +11,17 @@
 {% endblock %}
 {% block requests_tab_class %} active {% endblock %}
 {% block content %}
+<br>
+<div class="row">
+	<div class="col-xs-3">
+		<label for="priorityOrder">Ordering due to priority:</label>
+		<select name="order" id="priorityOrder">
+			<option value="1">Descending</option>
+			<option value="0">Ascending</option>
+		</select>
+	</div>
+</div>
+<br>
 <table class="table">
 	<tr class="row header">
 		<td class="col-xs-1">
