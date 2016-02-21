@@ -31,14 +31,6 @@
                     {% endif %}
                 </div>
             </div>
-            <ul class="nav nav-tabs">
-                <li role="presentation" class="{% block contacts_tab_class %}{% endblock %}"><a href="{% url 'contacts_list' %}">Contacts</a></li>
-                <li role="presentation" class="{% block requests_tab_class %}{% endblock %}"><a href="{% url 'requests_list' %}">Requests</a></li>
-                <li role="presentation" class="{% block edit_tab_class %}{% endblock %}"><a href="{% url 'contacts_edit' %}">Edit</a></li>
-                {% if user.is_anonymous %}
-                <li role="presentation" class="{% block login_tab_class %}{% endblock %}"><a href="{% url 'login' %}">Login</a></li>
-                {% endif %}
-            </ul>
         {% if messages %}
             {% for message in messages %}
                 <p class="message text-{{ message.tag }}">{{ message }}</p>

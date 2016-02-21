@@ -10,7 +10,7 @@ from apps.contacts import signals # flake8: noqa
 
 
 def contacts_list(request):
-    contacts = Contacts.objects.last()
+    contacts = Contacts.objects.first()
     return render(request, 'contacts.html', {"contacts": contacts})
 
 
@@ -24,7 +24,7 @@ class ContactsUpdateView(UpdateView):
         return super(ContactsUpdateView, self).dispatch(*args, **kwargs)
 
     def get_object(self):
-        return Contacts.objects.last()
+        return Contacts.objects.first()
 
     def post(self, request, *args, **kwargs):
         if not self.get_object():
