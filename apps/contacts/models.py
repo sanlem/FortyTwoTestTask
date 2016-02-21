@@ -15,7 +15,7 @@ class Contacts(models.Model):
     other_contacts = models.TextField(max_length=300, null=True, blank=True)
     image = models.ImageField(upload_to='images', blank=True, null=True)
 
-    def __str__(self):
+    def __unicode__(self):
         return "%s %s's contacts" % (self.name, self.lastname)
 
     def save(self, *args, **kwargs):

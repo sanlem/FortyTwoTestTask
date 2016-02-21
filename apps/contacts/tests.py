@@ -11,21 +11,13 @@ from django.template import Template, Context
 
 class TestContactsView(TestCase):
 
+    fixtures = ['data.json']
+
     def setUp(self):
         # create contacts object
-        self.contacts, created = \
-            Contacts.objects.get_or_create(name="Myname",
-                                           lastname="Mylastname",
-                                           email="myemail",
-                                           date_of_birth=datetime.today(),
-                                           jabber_id="myjabber",
-                                           skype_login="myskype",
-                                           bio="bio\r\n!",
-                                           other_contacts="bla\r\nbla")
-
+        self.contacts = Contacts.objects.last()
         # remember client
         self.client = Client()
-
         # remember url
         self.url = reverse("contacts_list")
 
@@ -42,13 +34,11 @@ class TestContactsView(TestCase):
         self.assertIn("br", response.content)
         # ensure view had only returned Contacts
         self.assertTrue(isinstance(response.context['contacts'], Contacts))
-
         # check if we have admin edit link
         edit_url = reverse('admin:contacts_contacts_change',
                            args=[self.contacts.id])
         self.assertIn(edit_url, response.content)
-
-        # if there are more than 1 contacts, should return the newest
+        # if there are more than 1 contacts, should return the first
         contacts = \
             Contacts(name="Myname",
                      lastname="Mylastname",
@@ -60,7 +50,7 @@ class TestContactsView(TestCase):
                      other_contacts="blabla")
         contacts.save()
         response = self.client.get(self.url)
-        self.assertEqual(response.context['contacts'].id, 2)
+        self.assertEqual(response.context['contacts'].id, 1)
 
         # should render 'No contacts.' if aren't any
         Contacts.objects.all().delete()
@@ -70,18 +60,12 @@ class TestContactsView(TestCase):
 
 class TestContactsModel(TestCase):
 
-    def test_str(self):
-        """ only custom methods need to be tested """
-        contacts = Contacts(name="Myname",
-                            lastname="Mylastname",
-                            email="myemail",
-                            date_of_birth=datetime.today(),
-                            jabber_id="myjabber",
-                            skype_login="myskype",
-                            bio="bio!",
-                            other_contacts="blabla")
+    fixtures = ['data.json']
 
-        self.assertEqual(str(contacts), "Myname Mylastname's contacts")
+    def test_unicode(self):
+        """ only custom methods need to be tested """
+        contacts = Contacts.objects.last()
+        self.assertEqual(unicode(contacts), u"Myname Mylastname's contacts")
 
 update_dict = {
     'name': 'Pavlo',
@@ -93,39 +77,34 @@ update_dict = {
 
 class TestContactsEditView(TestCase):
 
+    fixtures = ['data.json']
+
     def setUp(self):
         # create contacts object
-        self.contacts, created = \
-            Contacts.objects.get_or_create(name="Myname",
-                                           lastname="Mylastname",
-                                           email="myemail@email.com",
-                                           date_of_birth=datetime.today(),
-                                           jabber_id="myjabber",
-                                           skype_login="myskype",
-                                           bio="bio\r\n!",
-                                           other_contacts="bla\r\nbla")
-        # creating user to log it in
-        u = User(username='admin')
-        u.set_password('admin')
-        u.save()
-
+        self.contacts = Contacts.objects.last()
         # remember client
         self.client = Client()
-
+        self.client.login(username='admin', password='admin')
         # remember url
         self.url = reverse("contacts_edit")
-
         # remember image
         self.image = open('./assets/test_image.png')
 
-    def test_contacts_edit_view(self):
-        """ test contacts' edition """
+    def test_login_required(self):
+        """ page requires login """
+        self.client.logout()
         response = self.client.get(self.url)
         # not authenticated
         url = reverse('login') + '?next=/edit/'
         self.assertRedirects(response, url, status_code=302)
         self.client.login(username='admin', password='admin')
         # authenticated now
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_contacts_edit_page(self):
+        """ test contacts' edition page content """
+        self.client.login(username='admin', password='admin')
         response = self.client.get(self.url)
         # ensure we have form on the page
         self.assertIn('<form', response.content)
@@ -145,12 +124,16 @@ class TestContactsEditView(TestCase):
         self.assertIn('Myname', response.content)
         self.assertIn('Mylastname', response.content)
 
+    def test_valid_data(self):
+        """ test contact's edition """
         response = self.client.post(self.url, update_dict)
         self.assertEqual(response.status_code, 200)
         self.assertIn('Saved successfully', response.content)
         # ensure the name is changed
         self.assertEqual(Contacts.objects.get(pk=1).name, 'Pavlo')
 
+    def test_more_than_one_object(self):
+        """ should edit the first object """
         contacts = Contacts(name="Myname",
                             lastname="Mylastname",
                             email="myemail",
@@ -164,11 +147,14 @@ class TestContactsEditView(TestCase):
         params = update_dict.copy()
         params['name'] = 'Vitaliy'
         params['lastname'] = 'Franchook'
-        # ensure view edits the newest object
-        response = self.client.post(self.url, params)
-        self.assertEqual(Contacts.objects.get(pk=2).name, 'Vitaliy')
-        self.assertEqual(Contacts.objects.get(pk=1).name, 'Pavlo')
-        # invalid data
+        # ensure view edits the first object
+        self.client.post(self.url, params)
+        self.assertEqual(Contacts.objects.get(pk=1).name, 'Vitaliy')
+        self.assertEqual(Contacts.objects.get(pk=2).name, 'Myname')
+
+    def test_invalid_data(self):
+        """ invalid data """
+        params = update_dict.copy()
         params['name'] = ''
         params['date_of_birth'] = 'azaza'
         params['email'] = 'azaza'
@@ -177,8 +163,10 @@ class TestContactsEditView(TestCase):
         self.assertIn('Enter a valid date.', response.content)
         self.assertIn('Enter a valid email address.', response.content)
         # ensure object didn't changed
-        self.assertEqual(Contacts.objects.get(pk=2).name, 'Vitaliy')
+        self.assertEqual(Contacts.objects.get(pk=1).name, 'Myname')
 
+    def test_no_contacts(self):
+        """ if there are no contacts """
         Contacts.objects.all().delete()
         # should render 'Can't edit. No contacts exist.'
         response = self.client.get(self.url)
@@ -189,7 +177,6 @@ class TestContactsEditView(TestCase):
 
     def test_image_upload(self):
         """ some tests for image uploading """
-        self.client.login(username='admin', password='admin')
         params = update_dict.copy()
         params.update({'image': self.image})
         response = self.client.post(reverse('contacts_edit'), params)
@@ -272,33 +259,40 @@ class TestCommand(TestCase):
 
 class TestSignalProcessor(TestCase):
 
-    def test_processor(self):
-        """ creating some objects and checking theirs ChangeEntries. """
+    fixtures = ['data.json']
 
-        u = User(username='usr')
-        u.save()
-        # test creation
+    def setUp(self):
+        self.user = User.objects.last()
+
+    def test_creation(self):
+        """ creating some objects and checking theirs ChangeEntries. """
+        # user from fixture was created
         change = ChangeEntry.objects.last()
         self.assertEqual(change.model_name, 'User')
         self.assertEqual(change.action, 'created')
-        self.assertEqual(change.instance_id, u.id)
-        u.set_password('bla')
-        u.save()
+        self.assertEqual(change.instance_id, self.user.id)
+
+    def test_updation(self):
+        """ test for updating """
+        self.user.set_password('bla')
+        self.user.save()
         # test update
         change = ChangeEntry.objects.last()
         self.assertEqual(change.action, 'updated')
-        self.assertEqual(change.instance_id, u.id)
+        self.assertEqual(change.instance_id, self.user.id)
         counter = ChangeEntry.objects.filter(model_name='User').count()
         self.assertEqual(counter, 2)
-        # test deletion
+
+    def test_deletion(self):
+        """ test for deleting """
         # remember user's id before deletion
-        deleted_id = u.id
-        u.delete()
+        deleted_id = self.user.id
+        self.user.delete()
         change = ChangeEntry.objects.last()
         self.assertEqual(change.action, 'deleted')
         self.assertEqual(change.instance_id, deleted_id)
-        counter += 1
-        self.assertEqual(counter, 3)
+        counter = ChangeEntry.objects.filter(model_name='User').count()
+        self.assertEqual(counter, 2)
 
 
 class TestTemplateTags(TestCase):
