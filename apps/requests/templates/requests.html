@@ -52,7 +52,7 @@
 			{{ obj.is_ajax }}
 		</td>
 		<td class="col-xs-3">
-			{{ obj.timestamp }}
+			{{ obj.timestamp | date:"r" }}
 		</td>
 		<td class="col-xs-1">
 			{{ obj.priority }}

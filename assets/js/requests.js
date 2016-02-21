@@ -8,6 +8,12 @@ $(document).ready(function() {
     // remember id of newest request
     // var newestId = $('.request:first').attr('id');
     var newestId = 0;
+    $('.request').each(function(index, element){
+        if(element.id > newestId){
+            newestId = element.id;
+        };
+    });
+    console.log(newestId);
     // 1 if descending 0 if ascending
     var ordering = 1;
     
@@ -55,7 +61,7 @@ $(document).ready(function() {
                 // add timestamp
                 $('<td/>', {
                     'class': 'col-xs-3',
-                    text: obj.timestamp
+                    text: new Date(obj.timestamp).toUTCString()
                 }).appendTo(row);
                 // add priority
                 $('<td/>', {
