@@ -22,6 +22,11 @@ function clearErrors() {
 };
 
 function initForm(){
+	// image preview
+	$('#id_image').change(function(){
+  		var out = $('#output');
+  		out.attr('src', window.URL.createObjectURL(this.files[0]));
+  	});
 	var loading = $('<h2>Loading...</h2>');
 	var formContainer = $('.form-container');
 	var form = $('#editForm');
@@ -64,4 +69,5 @@ function initForm(){
 
 $(document).ready(function() {
 	initForm();
+
 });

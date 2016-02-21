@@ -106,9 +106,9 @@
 	<div class="row">
 		<div class="col-xs-6">
 		{% if object.image %}
-		<img src="{{ object.image.url }}">
+		<img id="output" src="{{ object.image.url }}">
 		{% else %}
-		<img src="http://ww1.prweb.com/prfiles/2014/04/10/11752526/gI_134971_best-image-web-hosting.png">
+		<img id="output" src="http://ww1.prweb.com/prfiles/2014/04/10/11752526/gI_134971_best-image-web-hosting.png">
 		{% endif %}
 		</div>
 		<div class="col-xs-6">
