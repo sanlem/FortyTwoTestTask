@@ -20,12 +20,9 @@ class RequestEntryListView(generics.ListAPIView):
     def get_queryset(self):
         """ filter entries by id that is greater than passed """
         queryset = RequestEntry.objects.order_by('-timestamp')
-        pk = self.request.query_params.get('pk', None)
         ordr = self.request.query_params.get('order', None)
         qs = list(queryset[:10])
         qs.sort(key=sort_by_priority)
-        if pk is not None:
-            queryset = queryset.filter(pk__gt=pk)
         if ordr is not None:
             qs.sort(key=sort_by_priority)
             return qs
