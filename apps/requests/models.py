@@ -6,7 +6,7 @@ class RequestEntry(models.Model):
     absolute_path = models.URLField()
     is_ajax = models.BooleanField()
     timestamp = models.DateTimeField(auto_now_add=True)
-    priority = models.IntegerField(default=0, blank=True)
+    priority = models.IntegerField(default=1, blank=True)
 
     class Meta:
         ordering = ["-priority", "-timestamp"]
