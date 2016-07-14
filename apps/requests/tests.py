@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from rest_framework.test import APIClient
 from apps.requests.models import RequestEntry
 import json
+from django.conf import settings
 
 
 class TestRequestsMiddlewareView(TestCase):
@@ -16,15 +17,17 @@ class TestRequestsMiddlewareView(TestCase):
 
     def test_middleware(self):
         """ test request middleware """
-        response = self.client.get(self.url2)
-
+        self.client.get(self.url2)
         response = self.client.get(self.url1)
         self.assertIn(self.url1, response.content)
         # 2 requests are already done
         self.assertEqual(len(response.context["objects"]), 2)
-        # default priority should be equal 0
+        # default priority should be equal 1
         self.assertIn('Priority', response.content)
-        self.assertEqual(response.context['objects'][0].priority, 0)
+        self.assertEqual(response.context['objects'][0].priority, 1)
+        # request to static url should have priority 0
+        self.client.get(settings.STATIC_URL)
+        self.failUnlessEqual(RequestEntry.objects.last().priority, 0)
         # we only have to show last 10 requests
         for i in range(11):
             response = self.client.get(self.url1)
@@ -56,7 +59,7 @@ class TestRequestsListEndpoint(TestCase):
         """ test ordering: should have 2 modes. """
         RequestEntry.objects.create(method='GET',
                                     absolute_path=reverse('login'),
-                                    is_ajax=False, priority=1)
+                                    is_ajax=False, priority=0)
         response = self.client.get(self.url)
         response_data = json.loads(response.content.decode())
         # should be ordered descending by priority if no params passed
@@ -65,5 +68,5 @@ class TestRequestsListEndpoint(TestCase):
         response_data = json.loads(response.content.decode())
         # should be ordered ascending now
         self.assertEqual(response_data[0]["priority"], 0)
-        self.assertEqual(response_data[1]["priority"], 0)
+        self.assertEqual(response_data[1]["priority"], 1)
         self.assertEqual(response_data[2]["priority"], 1)
