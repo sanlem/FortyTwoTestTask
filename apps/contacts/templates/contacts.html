@@ -34,11 +34,11 @@
 
 	<div class="row contacts">
 		<div class="col-xs-6">
-		{% if contacts.image %}
-		<img src="{{ MEDIA_URL }}{{ contacts.image }}">
-		{% else %}
-		<img src="http://ww1.prweb.com/prfiles/2014/04/10/11752526/gI_134971_best-image-web-hosting.png"></div>
-		{% endif %}
+		    {% if contacts.image %}
+		        <img src="{{ MEDIA_URL }}{{ contacts.image }}">
+		    {% else %}
+		        <img src="http://ww1.prweb.com/prfiles/2014/04/10/11752526/gI_134971_best-image-web-hosting.png">
+		    {% endif %}
 		</div>
 		<div class="col-xs-6">
 			Bio:
@@ -47,7 +47,7 @@
 			Other contacts:
 			{{ contacts.bio | linebreaks }}
 		</div>
-		<hr>
+    </div>
 	{% else %}
 	<h2>No contacts.</h2>
 	{% endif %}
