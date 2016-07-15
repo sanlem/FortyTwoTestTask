@@ -13,6 +13,7 @@ $(document).ready(function() {
             newestId = element.id;
         };
     });
+    var newestSeenId = newestId;
     console.log(newestId);
     // 1 if descending 0 if ascending
     var ordering = 1;
@@ -39,9 +40,11 @@ $(document).ready(function() {
                 if (obj.id > newestId) {
                     // check if this request is new
                     newestId = obj.id;
-                    row.addClass('new');
                     // increment counter
                     newRequestsCounter ++;
+                };
+                if (obj.id > newestSeenId) {
+                    row.addClass('new');
                 };
                 // add method col
                 $('<td/>', {
@@ -83,6 +86,7 @@ $(document).ready(function() {
         $('tr.request.new').removeClass('new');
         document.title = defaultTitle;
         newRequestsCounter = 0;
+        newestSeenId = newestId;
     };
 
     $(window).focus(function(){
