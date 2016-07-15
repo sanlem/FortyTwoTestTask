@@ -26,6 +26,8 @@ class TestContactsView(TestCase):
         response = self.client.get(self.url)
         # checking response's status code
         self.assertEqual(response.status_code, 200)
+        # check if the proper template was used
+        self.assertTemplateUsed(response, 'contacts.html')
         # check if we have correct name in content
         self.assertIn(self.contacts.name, response.content)
         # check if we have "Bio:" label in content
@@ -51,7 +53,6 @@ class TestContactsView(TestCase):
         contacts.save()
         response = self.client.get(self.url)
         self.assertEqual(response.context['contacts'].id, 1)
-
         # should render 'No contacts.' if aren't any
         Contacts.objects.all().delete()
         response = self.client.get(self.url)
@@ -106,6 +107,8 @@ class TestContactsEditView(TestCase):
         """ test contacts' edition page content """
         self.client.login(username='admin', password='admin')
         response = self.client.get(self.url)
+        # check if the proper template was used
+        self.assertTemplateUsed(response, 'edit.html')
         # ensure we have form on the page
         self.assertIn('<form', response.content)
         # ensure the form's media is loaded
@@ -208,6 +211,8 @@ class TestAuth(TestCase):
         response = self.client.post(self.login_url,
                                     {'username': self.user.username,
                                      'password': 'wrong_password'})
+        # check if the proper template was used
+        self.assertTemplateUsed(response, 'login.html')
         # credentials are wrong
         self.assertTrue(response.context['user'].is_anonymous())
         self.assertIn('Please enter a correct username and password',

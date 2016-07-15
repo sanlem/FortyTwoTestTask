@@ -19,6 +19,8 @@ class TestRequestsMiddlewareView(TestCase):
         """ test request middleware """
         self.client.get(self.url2)
         response = self.client.get(self.url1)
+        # check if the proper template was used
+        self.assertTemplateUsed(response, 'requests.html')
         self.assertIn(self.url1, response.content)
         # 2 requests are already done
         self.assertEqual(len(response.context["objects"]), 2)
