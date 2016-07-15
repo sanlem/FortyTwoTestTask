@@ -2,8 +2,6 @@ from apps.requests.models import RequestEntry
 from django.core.urlresolvers import reverse
 from django.conf import settings
 
-import random
-
 
 class RequestMiddleware(object):
     """ saves info about all requests into DB. """
