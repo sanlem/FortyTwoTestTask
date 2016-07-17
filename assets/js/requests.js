@@ -18,7 +18,7 @@ $(document).ready(function() {
     // 1 if descending 0 if ascending
     var ordering = 1;
     
-    function updateRequests(orderChanged) {
+    function updateRequests() {
         var url = apiUrl;
         // re-rendering
         if (ordering == 0) {
